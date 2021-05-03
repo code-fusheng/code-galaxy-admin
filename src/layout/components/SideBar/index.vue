@@ -6,22 +6,23 @@
       @open="handleOpen"
       @close="handleClose"
       :collapse="isCollapse"
+      :router="true"
     >
       <!-- 首页 -->
-      <el-submenu index="0">
+      <el-submenu index="dashboard">
         <template #title>
           <i class="el-icon-s-home"></i>
           <span>首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </template>
       </el-submenu>
       <!-- 基础管理 -->
-      <el-submenu index="1">
+      <el-submenu index="base">
         <template #title>
           <i class="el-icon-s-tools"></i>
           <span>基础管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">字典管理</el-menu-item>
+          <el-menu-item index="dictType">字典类型</el-menu-item>
           <el-menu-item index="1-2">公告管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -87,11 +88,17 @@
 </script>
 
 <style>
+  aside {
+    width: 181px !important;
+  }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
+    width: 180px !important;
     min-height: 400px;
   }
-  aside {
-    width: 201px !important;
+  .el-submenu .el-menu-item {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 45px;
+    min-width: 180px !important;
   }
 </style>
