@@ -2,6 +2,7 @@
 import Axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { error } from 'node:console'
+import store from '../store/index'
 
 const baseURL = 'http://localhost:9999'
 
@@ -17,6 +18,9 @@ axios.interceptors.request.use(
          * 这里根据项目的实际情况处理 config
          * 如果不做任何处理，直接返回 config
          */
+        if (store.getters.token) {
+          config.headers['Authorization'] = 'Bearer ' + store.getters.token
+        }
         return config
     },
     (error) => {
@@ -38,7 +42,7 @@ axios.interceptors.response.use(
             console.error(`[Axios Error], error.response`)
         } else {
             ElMessage.error(`${error}`)
-        } 
+        }
         return Promise.reject(error)
     }
 )

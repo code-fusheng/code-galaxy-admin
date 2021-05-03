@@ -10,6 +10,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
+    "allowSyntheticDefaultImports": true, //允许从没有设置默认导出的模块默认导入
+    "noImplicitAny": false, //在表达式和声明上有隐含的any类型报错
     "types": ["vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]

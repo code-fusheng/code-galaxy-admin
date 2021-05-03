@@ -1,7 +1,6 @@
 // Vuex 配置文件
 // Vuex 是专门为 Vue.js 设计的状态管理库，以利用 Vue.js 的细粒度数据响应机制来进行高效的状态更新。
 // 参考链接 https://vuex.vuejs.org/zh/
-import { resolve } from 'node:path'
 import { createStore } from 'vuex'
 
 const defaultState = {
@@ -20,7 +19,7 @@ export default createStore({
         increment(state: typeof defaultState) {
             state.count ++
         },
-        setToken: (state, token) => {
+        SET_TOKEN: (state, token) => {
           state.token = token
         }
     },
@@ -29,18 +28,14 @@ export default createStore({
         increment(context) {
             context.commit('increment')
         },
-        setToken(token){
-          console.log(token)
-          token.commit('token')
+        login({ commit }, loginDto ){
+
         }
     },
     // 属性状态访问函数
     getters: {
         double(state: typeof defaultState) {
             return 2 * state.count
-        },
-        token(state: typeof defaultState) {
-          return state.token
         }
     }
 
