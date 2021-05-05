@@ -4,35 +4,51 @@ import { createRouter, createMemoryHistory, RouteRecordRaw, createWebHashHistory
 import Layout from '@/layout/appMain.vue'
 
 const routes: Array<RouteRecordRaw> = [
-    {
-        path: '/',
-        name: 'Layout',
-        component: Layout,
-        redirect: '/dashboard',
-        children: [
-          {
-            path: 'dashboard',
-            name: 'Dashboard',
-            component: () => import('@/views/dashboard/index.vue')
-          },
-          {
-            path: 'dictType',
-            name: 'DictType',
-            component: () => import('@/views/base/dict/type/type-list.vue')
-          },
-          {
-            path: 'dictData/:dictType',
-            name: 'DictData',
-            component: () => import('@/views/base/dict/data/data-list.vue')
-          }
-        ]
-    }
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index.vue')
+      },
+      {
+        path: 'dictType',
+        name: 'DictType',
+        component: () => import('@/views/base/dict/type/type-list.vue')
+      },
+      {
+        path: 'dictData/:dictType',
+        name: 'DictData',
+        component: () => import('@/views/base/dict/data/data-list.vue')
+      }
+    ]
+  },
+  {
+    path: '/exam',
+    component: Layout,
+    redirect: '/exam/repository',
+    children: [
+      {
+        path: 'repository',
+        name: 'Repository',
+        component: () => import('@/views/exam/repository/repository-list.vue')
+      },
+      {
+        path: 'question',
+        name: 'Question',
+        component: () => import('@/views/exam/question/question-list.vue')
+      }
+    ]
+  }
 ]
 
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes
+  history: createWebHashHistory(),
+  routes
 })
 
 export default router

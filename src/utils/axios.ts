@@ -32,7 +32,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     (response) => {
         // console.log(response.data)
-        return response
+        return response.data
     },
     (error) => {
         if (error.response && error.response.data) {

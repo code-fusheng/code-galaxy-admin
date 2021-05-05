@@ -40,17 +40,16 @@
         </el-menu-item-group>
       </el-submenu>
       <!-- 考试管理 -->
-      <el-submenu index="3">
+      <el-submenu index="exam">
         <template #title>
           <i class="el-icon-tickets"></i>
           <span>考试管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="3-1">题库管理</el-menu-item>
-          <el-menu-item index="3-2">试题管理</el-menu-item>
-          <el-menu-item index="3-3">规则管理</el-menu-item>
-          <el-menu-item index="3-4">试卷管理</el-menu-item>
-          <el-menu-item index="3-4">试卷管理</el-menu-item>
+          <el-menu-item index="repository">题库管理</el-menu-item>
+          <el-menu-item index="question">试题管理</el-menu-item>
+          <el-menu-item index="rule">规则管理</el-menu-item>
+          <el-menu-item index="paper">试卷管理</el-menu-item>
           <el-menu-item index="3-5">成绩管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>

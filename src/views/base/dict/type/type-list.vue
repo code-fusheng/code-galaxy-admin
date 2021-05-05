@@ -150,8 +150,7 @@ export default defineComponent({
   methods: {
     getDictTypeByPage() {
       getDictTypeByPage(this.page).then((res) => {
-        console.log(res.data.data.list);
-        this.page.list = res.data.data.list
+        this.page = res.data
         this.loading = false
       })
     },

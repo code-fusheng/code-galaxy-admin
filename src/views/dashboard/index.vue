@@ -41,14 +41,14 @@ export default defineComponent({
     testAxios() {
       axios.get("/test-server/debug/getPort").then((res) => {
         console.log(res.data);
-        this.port = res.data.data;
+        this.port = res.data;
       });
     },
     login() {
       login(this.loginDto).then(res => {
         console.log(res)
-        this.token = res.data.data
-        store.commit('setToken', res.data.data)
+        this.token = res.data
+        store.commit('setToken', res.data)
         console.log(store.getters.token)
 
       })
@@ -56,7 +56,7 @@ export default defineComponent({
     info() {
       info().then(res => {
         console.log(res)
-        this.user = res.data
+        this.user = res
       })
     }
   },

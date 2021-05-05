@@ -1,19 +1,15 @@
 <template>
-  <div class="dicttype-container">
+  <div>
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
-      <el-form-item label="字典标签">
-        <el-input v-model="page.params.dictLabel" placeholder="请输入字典标签" clearable />
-      </el-form-item>
-      <el-form-item label="字典类型">
-        <el-input v-model="page.params.dictType" placeholder="请输入字典类型" clearable />
+      <el-form-item label="题库名称">
+        <el-input v-model="page.params.repositoryName" placeholder="请输入题库名称" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" sizi="mini">查询</el-button>
         <el-button type="success" icon="el-icon-refresh-left" size="mini">恢复</el-button>
       </el-form-item>
-    </el-form>
-    <!-- 表格工具按钮开始 -->
+      <!-- 表格工具按钮开始 -->
     <el-row :gutter="10" style="margin-bottom: 8px;">
       <el-col :span="1.5">
         <el-button type="primary" icon="el-icon-plus" size="mini">新增</el-button>
@@ -24,11 +20,9 @@
       <el-col :span="1.5">
         <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple">删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button type="warning" icon="el-icon-refresh" size="mini">缓存同步</el-button>
-      </el-col>
     </el-row>
     <!-- 表格工具按钮结束 -->
+    </el-form>
     <el-table
       v-loading="loading"
       :data="page.list"
@@ -39,12 +33,12 @@
       :row-style="{cursor: 'pointer'}"
     >
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column prop="dictLabel" label="字典标签" min-width="180" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictValue" label="字典键值" min-width="120" align="center" />
-      <el-table-column prop="dictType" label="字典类型" min-width="180" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictSort" label="字典排序" min-width="120" align="center" />
+      <!-- <el-table-column type="index" fixed="left" label="#" min-width="50" align="center" /> -->
+      <el-table-column prop="repositoryId" label="题库编号" width="200" align="center" />
+      <el-table-column prop="repositoryName" label="题库名称" min-width="220" align="center" sortable="custom" show-overflow-tooltip />
+      <el-table-column prop="questionCount" label="试题数" width="120" align="center" sortable="custom" />
       <el-table-column prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="updateTime" label="更新时间" min-width="180" align="center" sortable="custom" />
+      <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" />
       <el-table-column prop="createdUserName" label="创建者" min-width="120" align="center" />
       <el-table-column prop="updateUserName" label="更新者" min-width="120" align="center" />
       <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip />
@@ -64,18 +58,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <!--
-      分页组件-最完整版
-      class : 分页组件
-      current-page : 当前页 此处为动态绑定page对象的currentPage属性
-      page-sizes : 每页显示个数选择器的选项设置
-      page-size : 每页大小
-      layout : 组件布局
-      total : 总条目数 此处动态绑定page对象的totalCount属性
-      @size-change="handleSizeChange"  pageSize 改变时会触发  参数:每页条数
-      @current-change="handleCurrentChange" currentPage 改变时会触发 参数:当前页
-     -->
     <el-pagination
       align="center"
       class="pagination"
@@ -89,25 +71,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { getDictDataByPage } from '../../../../api/base/dictData'
+import { defineComponent } from "vue";
+import { getRepositoryByPage } from "../../../api/exam/repository";
 
 export default defineComponent({
   data() {
     return {
-      dictType: {},
-      // 定义page对象
       page: {
-        currentPage: 1, // 当前页
-        pageSize: 10, // 每页显示条数
-        totalPage: 0, // 总页数
-        totalCount: 0, // 总条数
-        params: {
-          dictType: {}
-        }, // 查询参数对象
-        list: [], // 数据
-        sortColumn: 'createdTime', // 排序列
-        sortMethod: 'asc' // 排序方式
+        currentPage: 1,
+        pageSize: 10,
+        totalPage: 0,
+        totalCount: 0,
+        params: {},
+        list: [],
+        sortColumn: 'created_time',
+        sortMethod: 'asc'
       },
       // 选中数组
       ids: [],
@@ -116,21 +94,19 @@ export default defineComponent({
       // 非多个禁用
       multiple: true,
       loading: true, // 控制是否显示加载效果
-    }
+    };
   },
   created() {
-    this.page.params.dictType = this.$route.params.dictType
-    this.getDictDataByPage()
+    this.getRepositoryByPage();
   },
   methods: {
-    getDictDataByPage() {
-      getDictDataByPage(this.page).then((res) => {
-        this.page = res.data
+    getRepositoryByPage() {
+      getRepositoryByPage(this.page).then((res) => {
+        this.page = res.data;
         this.loading = false
-      })
-    }
-  }
-})
+      });
+    },
+  },
+});
 </script>
-
 
