@@ -13,3 +13,8 @@ export const getQuestionByPage = (data: page) => axios({
   method: 'post',
   data
 })
+
+export const getQuestionWithOptionsAndAnswersById = (id: any) => axios({
+  url: `/${prefix_name}/getQuestionWithOptionsAndAnswersById/${id}`,
+  method: 'get',
+})

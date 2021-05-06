@@ -9,7 +9,7 @@ export interface page {
 }
 
 export interface dictTypeDto {
-  dictId: number,
+  dictId: String,
   dictName: String,
   dictType: number,
   remark: String

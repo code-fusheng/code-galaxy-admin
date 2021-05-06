@@ -24,6 +24,8 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "../../utils/axios";
 import { login, info } from "../../api/user/login";
 import store from '../../store/index'
+
+
 export default defineComponent({
   data() {
     return {
@@ -50,7 +52,6 @@ export default defineComponent({
         this.token = res.data
         store.commit('setToken', res.data)
         console.log(store.getters.token)
-
       })
     },
     info() {

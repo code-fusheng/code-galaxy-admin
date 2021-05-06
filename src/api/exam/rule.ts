@@ -1,6 +1,5 @@
 import axios from '../../utils/axios'
-
-var prefix_name = 'exam-admin-server/repository'
+var prefix_name = 'exam-admin-server/rule'
 
 export interface page {
   pageSize: number,
@@ -9,9 +8,8 @@ export interface page {
   sortMethod: String
 }
 
-export const getRepositoryByPage = (data: page) => axios({
-  url: `/${prefix_name}/getRepositoryByPage`,
+export const getRuleByPage = (data: page) => axios({
+  url: `/${prefix_name}/getRuleByPage`,
   method: 'post',
   data
 })
-

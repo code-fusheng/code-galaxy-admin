@@ -40,7 +40,22 @@ const routes: Array<RouteRecordRaw> = [
         path: 'question',
         name: 'Question',
         component: () => import('@/views/exam/question/question-list.vue')
-      }
+      },
+      {
+        path: 'questionInfo/:questionId',
+        name: 'QuestionInfo',
+        component: () => import('@/views/exam/question/question-info.vue')
+      },
+      {
+        path: 'rule',
+        name: 'Rule',
+        component: () => import('@/views/exam/rule/rule-list.vue')
+      },
+      {
+        path: 'paper',
+        name: 'Paper',
+        component: () => import('@/views/exam/paper/paper-list.vue')
+      },
     ]
   }
 ]
