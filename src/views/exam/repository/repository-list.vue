@@ -39,8 +39,8 @@
       <el-table-column prop="questionCount" label="试题数" width="120" align="center" sortable="custom" />
       <el-table-column prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" />
       <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="createdUserName" label="创建者" min-width="120" align="center" />
-      <el-table-column prop="updateUserName" label="更新者" min-width="120" align="center" />
+      <el-table-column prop="createdName" label="创建者" min-width="120" align="center" />
+      <el-table-column prop="updatorName" label="更新者" min-width="120" align="center" />
       <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip />
       <el-table-column prop="isEnabled" label="状态" min-width="100" align="center">
         <template #default={row}>

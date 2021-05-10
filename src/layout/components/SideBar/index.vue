@@ -6,7 +6,6 @@
       @open="handleOpen"
       @close="handleClose"
       :collapse="isCollapse"
-      :router="true"
     >
       <!-- 首页 -->
       <el-submenu index="dashboard">
@@ -22,7 +21,9 @@
           <span>基础管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="dictType">字典类型</el-menu-item>
+          <router-link to="/base/dictType">
+            <el-menu-item>字典类型</el-menu-item>
+          </router-link>
           <el-menu-item index="1-2">公告管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -46,11 +47,21 @@
           <span>考试管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="repository">题库管理</el-menu-item>
-          <el-menu-item index="question">试题管理</el-menu-item>
-          <el-menu-item index="rule">规则管理</el-menu-item>
-          <el-menu-item index="paper">试卷管理</el-menu-item>
-          <el-menu-item index="3-5">成绩管理</el-menu-item>
+          <router-link to="/exam/repository">
+            <el-menu-item>题库管理</el-menu-item>
+          </router-link>
+          <router-link to="/exam/question">
+            <el-menu-item>试题管理</el-menu-item>
+          </router-link>
+          <router-link to="/exam/rule">
+            <el-menu-item>规则管理</el-menu-item>
+          </router-link>
+          <router-link to="/exam/paper">
+            <el-menu-item>试卷管理</el-menu-item>
+          </router-link>
+          <router-link to="/exam/grades">
+            <el-menu-item>成绩管理</el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <!-- 文章管理 -->
@@ -99,5 +110,9 @@
     line-height: 50px;
     padding: 0 45px;
     min-width: 180px !important;
+    color: black !important;
+  }
+  a {
+    text-decoration: none;
   }
 </style>

@@ -65,10 +65,10 @@
               <span>{{ row.questionCode }}</span>
             </el-form-item>
             <el-form-item label="创建者">
-              <span>{{ row.createdUserName }}</span>
+              <span>{{ row.creatorName }}</span>
             </el-form-item>
             <el-form-item label="更新者">
-              <span>{{ row.updateUserName }}</span>
+              <span>{{ row.updaterName }}</span>
             </el-form-item>
             <el-form-item label="备注">
               <span>{{ row.remark }}</span>

@@ -64,7 +64,7 @@
       <el-table-column prop="dictName" label="类型名称" min-width="180" align="center" show-overflow-tooltip />
       <el-table-column prop="dictType" label="字典类型" min-width="180" align="center" :show-overflow-tooltip="true">
         <template #default={row}>
-          <router-link :to="'/dictData/' + row.dictType" class="link-type">
+          <router-link :to="'/base/dictData/' + row.dictType" class="link-type">
             <span>{{ row.dictType }}</span>
           </router-link>
         </template>

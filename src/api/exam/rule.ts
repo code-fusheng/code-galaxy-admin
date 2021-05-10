@@ -13,3 +13,9 @@ export const getRuleByPage = (data: page) => axios({
   method: 'post',
   data
 })
+
+// 获取规则信息
+export const getRuleById = (id: any) => axios({
+  url: `${prefix_name}/getRuleById/${id}`,
+  method: 'get'
+})

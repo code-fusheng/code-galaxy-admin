@@ -14,6 +14,13 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index.vue')
       },
+    ]
+  },
+  {
+    path: '/base',
+    component: Layout,
+    redirect: '/base/dictType',
+    children: [
       {
         path: 'dictType',
         name: 'DictType',
@@ -54,6 +61,16 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'paper',
         name: 'Paper',
+        component: () => import('@/views/exam/paper/paper-list.vue')
+      },
+      {
+        path: 'paperInfo/:paperId',
+        name: 'PaperInfo',
+        component: () => import('@/views/exam/paper/paper-info.vue')
+      },
+      {
+        path: 'grades',
+        name: 'Grades',
         component: () => import('@/views/exam/paper/paper-list.vue')
       },
     ]
