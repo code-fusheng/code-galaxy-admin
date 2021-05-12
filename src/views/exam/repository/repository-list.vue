@@ -87,7 +87,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { getRepositoryByPage, getRepositoryById, deleteRepositoryByIds } from "../../../api/exam/repository";
+import { getRepositoryByPage, getRepositoryById, deleteRepositoryByIds } from "@/api/exam/repository";
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 import RepositoryAdd from './repository-add.vue'

@@ -136,7 +136,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { saveQuestion } from '../../../api/exam/question'
+import { saveQuestion } from '@/api/exam/question'
 
 export default defineComponent({
   props: {

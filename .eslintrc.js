@@ -1,13 +1,12 @@
-// ESLint 配置文件
 module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true,
   },
   extends: [
     'plugin:vue/essential',
     'airbnb-base',
+    'plugin:vue/vue3-essential'
   ],
   parserOptions: {
     ecmaVersion: 12,

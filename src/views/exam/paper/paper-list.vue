@@ -55,11 +55,11 @@
       </el-table-column>
       <el-table-column label="操作" min-width="250" align="center">
         <template #default={row}>
-          <el-button type="text" icon="el-icon-position" size="mini" @click="handleReleaseExam(row)">发布考试</el-button>
-          <el-button type="text" size="mini" icon="el-icon-edit" @click="openUpdateDialog(row)">修改</el-button>
-          <el-button v-if="row.isEnabled === 0" type="text" icon="el-icon-check" size="mini" @click="toEnable(row.paperId)">启用</el-button>
-          <el-button v-if="row.isEnabled === 1" type="text" icon="el-icon-close" size="mini" @click="toDisable(row.paperId)">弃用</el-button>
-          <el-button type="text" size="mini" icon="el-icon-delete" @click="toDelete(row)">删除</el-button>
+          <el-button type="text" icon="el-icon-position" size="mini">发布考试</el-button>
+          <el-button type="text" size="mini" icon="el-icon-edit" >修改</el-button>
+          <el-button v-if="row.isEnabled === 0" type="text" icon="el-icon-check" size="mini">启用</el-button>
+          <el-button v-if="row.isEnabled === 1" type="text" icon="el-icon-close" size="mini">弃用</el-button>
+          <el-button type="text" size="mini" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,16 +77,16 @@
     />
 
     <!-- 添加弹窗 -->
-    <!-- <el-dialog title="添加试卷" v-model="addDialog">
-      <paper-add @closeAddDialog="closeAddDialog" @getByPage="getPaperByPage" />
-    </el-dialog> -->
+    <el-dialog title="添加试卷" v-model="addDialog">
+      <paper-add @closeAddDialog="closeAddDialog" @getPaperByPage="getPaperByPage" />
+    </el-dialog>
     <!--
       修改弹窗
       :paper="paper" 用于传递参数对象
     -->
-    <!-- <el-dialog title="修改试卷" v-model="updateDialog">
+    <el-dialog title="修改试卷" v-model="updateDialog">
       <paper-update :paper="paper" @closeUpdateDialog="closeUpdateDialog" @getPaperByPage="getPaperByPage" />
-    </el-dialog> -->
+    </el-dialog>
 
   </div>
 </template>
@@ -96,15 +96,15 @@ import { defineComponent } from 'vue'
 import { getPaperByPage } from '../../../api/exam/paper'
 
 // 导入组件
-// import paperAdd from '@/paper/paper-add.vue's
-// import paperUpdate from './paper-update.vue'
+import paperAdd from './paper-add.vue'
+import paperUpdate from './paper-update.vue'
 
 
 export default defineComponent({
   //  定义添加的组件 子组件/私有组件
   components: {
-    // paperAdd,s
-    // paperUpdates
+    paperAdd,
+    paperUpdate
   },
   data() {
     return {

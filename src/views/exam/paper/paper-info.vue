@@ -204,9 +204,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getPaperBaseInfoById } from '../../../api/exam/paper'
-import { getRuleById } from "../../../api/exam/rule"
-import { getQuestionAndOptionsWithAnswersByPageForPaperId } from '../../../api/exam/question'
+import { getPaperBaseInfoById } from '@/api/exam/paper'
+import { getRuleById } from "@/api/exam/rule"
+import { getQuestionAndOptionsWithAnswersByPageForPaperId } from '@/api/exam/question'
 
 
 export default defineComponent({

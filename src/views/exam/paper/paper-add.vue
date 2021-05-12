@@ -40,8 +40,8 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { savePaper } from '../../../api/exam/paper'
-import store from '../../../store/index'
+import { savePaper } from '@/api/exam/paper'
+import store from '@/store/index'
 
 export default defineComponent({
   data() {

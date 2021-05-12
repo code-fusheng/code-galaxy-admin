@@ -120,8 +120,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getQuestionWithOptionsAndAnswersById, updateQuestionWithOptionsAndAnswers } from "../../../api/exam/question";
-import store from '../../../store/index'
+import { getQuestionWithOptionsAndAnswersById, updateQuestionWithOptionsAndAnswers } from "@/api/exam/question";
+import store from '@/store/index'
 
 export default defineComponent({
   data() {

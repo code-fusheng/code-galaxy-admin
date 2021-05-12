@@ -110,7 +110,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { saveRule } from '../../../api/exam/rule'
+import { saveRule } from '@/api/exam/rule'
 
 export default defineComponent({
   data() {

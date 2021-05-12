@@ -120,8 +120,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { updateQuestionWithOptionsAndAnswers } from "../../../api/exam/question";
-import store from '../../../store/index'
+import { updateQuestionWithOptionsAndAnswers } from "@/api/exam/question";
+import store from '@/store/index'
 
 export default defineComponent({
   // 父组件将数据传递给子组件

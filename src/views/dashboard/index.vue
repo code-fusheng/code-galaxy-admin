@@ -21,9 +21,9 @@
 <script lang="ts">
 import { ref, defineComponent } from "vue";
 import { Component, Vue } from "vue-property-decorator";
-import axios from "../../utils/axios";
-import { login, info } from "../../api/user/login";
-import store from '../../store/index'
+import axios from "@/utils/axios";
+import { login, info } from "@/api/user/login";
+import store from '@/store/index'
 
 
 export default defineComponent({

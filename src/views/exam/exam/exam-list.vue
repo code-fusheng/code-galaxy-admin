@@ -93,7 +93,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getExamByPage } from "../../../api/exam/exam"
+import { getExamByPage } from "@/api/exam/exam"
 
 export default defineComponent({
   data() {

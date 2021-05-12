@@ -6,9 +6,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getRepositoryList } from './api/exam/repository'
-import { getRuleList } from './api/exam/rule'
-import store from '../src/store/index'
+import { getRepositoryList } from '@/api/exam/repository'
+import { getRuleList } from '@/api/exam/rule'
+import store from '@/store/index'
 
 export default defineComponent({
   name: 'App',

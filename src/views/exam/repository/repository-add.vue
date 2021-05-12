@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { saveRepository } from "../../../api/exam/repository";
+import { saveRepository } from "@/api/exam/repository";
 export default defineComponent({
   data() {
     return {

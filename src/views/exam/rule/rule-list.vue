@@ -155,7 +155,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getRuleByPage } from "../../../api/exam/rule"
+import { getRuleByPage } from "@/api/exam/rule"
 
 // 导入组件
 import ruleAdd from './rule-add.vue'

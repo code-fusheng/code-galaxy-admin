@@ -118,7 +118,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getDictTypeByPage } from '../../../../api/base/dictType'
+import { getDictTypeByPage } from '@/api/base/dictType'
 
 export default defineComponent({
   data() {

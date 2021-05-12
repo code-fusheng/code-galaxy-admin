@@ -9,6 +9,7 @@
 (2021/05/06 09:00 --- 2021/05/06 23:12) feature : 试题/规则 --- 新增试题详情页、组卷规则列表
 (2021/05/10 21:00 --- 2021/05/11 03:19) feature : 试卷管理 --- 新增试卷列表、试卷详情页
 (2021/05/12 10:00 --- 2021/05/13 02:19) feature : 系统完善
+(2021/05/13 02:25 --- 2021/05/13 04:17) feature : 资源配置 --- 修复 vite 根目录配置与 ts 冲突的问题
 ```
 
 ### 技术说明
@@ -69,7 +70,35 @@ npx eslint --init
 ``` 
 7、集成 TS 开发装饰器
 ```shell
+$ npm i -s vue-class-component
 $ npm i -S vue-property-decorator
+```
+
+8、根目录问题处理
+```
+// npm i @types/node -D
+import path from 'path'
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, './'),
+      '@': path.resolve(__dirname, 'src')
+    }
+  },
+})
+
+// Ts 配置文件 tsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["src/*"]
+    }
+  },
+}
+
 ```
 
 ### 后台界面元素设计

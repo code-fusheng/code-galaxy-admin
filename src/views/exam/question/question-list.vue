@@ -167,8 +167,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getQuestionByPage, getQuestionWithOptionsAndAnswersById } from "../../../api/exam/question"
-import store from '../../../store/index'
+import { getQuestionByPage, getQuestionWithOptionsAndAnswersById } from "@/api/exam/question"
+import store from '@/store/index'
 
 import QuestionAdd from './question-add.vue'
 import QuestionUpdate from './question-update.vue'

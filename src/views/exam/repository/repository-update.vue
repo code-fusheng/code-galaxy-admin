@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { updateRepository } from "../../../api/exam/repository";
+import { updateRepository } from "@/api/exam/repository";
 
 export default defineComponent({
 // 父组件将数据传递给子组件
