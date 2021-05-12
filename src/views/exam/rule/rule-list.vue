@@ -13,7 +13,7 @@
     <!-- 表格工具按钮开始 -->
     <el-row :gutter="10" style="margin-bottom: 8px;">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini">新增</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="openAddDialog">新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single">修改</el-button>
@@ -93,12 +93,12 @@
         </template>
       </el-table-column>
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column prop="ruleId" label="规则编号" width="200" align="center" />
+      <el-table-column prop="ruleId" label="规则编号" align="center" show-overflow-tooltip />
       <el-table-column prop="ruleName" label="规则名称" min-width="200" align="center" show-overflow-tooltip />
-      <el-table-column prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="createdName" label="创建者" min-width="120" align="center" />
-      <el-table-column prop="updatorName" label="更新者" min-width="120" align="center" />
+      <!-- <el-table-column prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" />
+      <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" /> -->
+      <!-- <el-table-column prop="createdName" label="创建者" min-width="120" align="center" />
+      <el-table-column prop="updatorName" label="更新者" min-width="120" align="center" /> -->
       <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip />
       <el-table-column prop="isEnable" label="状态" min-width="100" align="center">
         <template #default={row}>
@@ -106,7 +106,7 @@
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="300" align="center">
+      <el-table-column label="操作" min-width="240" align="center">
         <template #default={row}>
           <el-button type="text" size="mini" icon="el-icon-edit">修改</el-button>
           <el-button type="text" size="mini" icon="el-icon-view">查看</el-button>
@@ -137,16 +137,39 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
     />
+
+    <!-- 添加弹窗 -->
+    <el-dialog title="添加规则" v-model="addDialog" width="80%">
+      <rule-add @closeAddDialog="closeAddDialog" @getRuleByPage="getRuleByPage" />
+    </el-dialog>
+    <!--
+      修改弹窗
+      :rule="rule" 用于传递参数对象
+    -->
+    <el-dialog title="修改规则" v-model="updateDialog" width="80%">
+      <rule-update :rule="rule" @closeUpdateDialog="closeUpdateDialog" @getRuleByPage="getRuleByPage" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getRuleByPage } from "../../../api/exam/rule";
+import { getRuleByPage } from "../../../api/exam/rule"
+
+// 导入组件
+import ruleAdd from './rule-add.vue'
+import ruleUpdate from './rule-update.vue'
 
 export default defineComponent({
+  //  定义添加的组件 子组件/私有组件
+  components: {
+    ruleAdd,
+    ruleUpdate
+  },
   data() {
     return {
+      rule: {},
       page: {
         currentPage: 1,
         pageSize: 10,
@@ -164,6 +187,9 @@ export default defineComponent({
       // 非多个禁用
       multiple: true,
       loading: true, // 控制是否显示加载效果
+      selectRules: [], // 被选中的列
+      addDialog: false, // 控制添加弹窗显示
+      updateDialog: false // 控制修改弹窗显示
     };
   },
   created() {
@@ -176,6 +202,19 @@ export default defineComponent({
         this.loading = false
       });
     },
+    // 模块功能组件
+    openAddDialog() {
+      // 打开添加弹窗
+      this.addDialog = true
+    },
+    closeAddDialog() {
+      // 关闭添加弹窗
+      this.addDialog = false
+    },
+    closeUpdateDialog() {
+      // 关闭修改弹窗
+      this.updateDialog = false
+    }
   },
 })
 </script>

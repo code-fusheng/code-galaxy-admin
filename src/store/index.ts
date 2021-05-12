@@ -5,7 +5,9 @@ import { createStore } from 'vuex'
 
 const defaultState = {
     count: 0,
-    token: ''
+    token: '',
+    repositoryList: [],
+    ruleList: []
 }
 
 // 创建一个 store 实例
@@ -21,7 +23,13 @@ export default createStore({
         },
         setToken: (state, token) => {
           state.token = token
-        }
+        },
+        setRepositoryList: (state, repositoryList) => (
+          state.repositoryList = repositoryList
+        ),
+        setRuleList: (state, ruleList) => (
+          state.ruleList = ruleList
+        )
     },
     // action 提交操作 不直接更改状态 间接通过 mutations 去操作更新状态
     actions: {
@@ -31,6 +39,12 @@ export default createStore({
         setToken(token){
           console.log(token)
           token.commit('token')
+        },
+        setRepositoryList(repositoryList) {
+          repositoryList.commit('repositoryList')
+        },
+        setRuleList(ruleList) {
+          ruleList.commit('ruleList')
         }
     },
     // 属性状态访问函数
@@ -40,6 +54,12 @@ export default createStore({
         },
         token(state: typeof defaultState) {
           return state.token
+        },
+        repositoryList(state: typeof defaultState) {
+          return state.repositoryList
+        },
+        ruleList(state: typeof defaultState) {
+          return state.ruleList
         }
     }
 

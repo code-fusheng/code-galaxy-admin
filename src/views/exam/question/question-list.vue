@@ -8,7 +8,7 @@
       <el-form-item label="题库归属" prop="repositoryId">
         <el-select v-model="page.params.repositoryId" placeholder="请选择所属题库" clearable filterable>
           <el-option
-            v-for="repository in requestionList"
+            v-for="repository in repositoryList"
             :key="repository.repositoryId"
             :label="repository.repositoryName"
             :value="repository.repositoryId"
@@ -16,17 +16,17 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" sizi="mini">查询</el-button>
-        <el-button type="success" icon="el-icon-refresh-left" size="mini">恢复</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="search">查询</el-button>
+        <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">恢复</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格工具按钮开始 -->
     <el-row :gutter="10" style="margin-bottom: 8px;">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini">新增</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="openCustomAddDrawer">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single">修改</el-button>
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="openUpdateDrawer">>修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple">删除</el-button>
@@ -48,6 +48,8 @@
       style="width: 100%"
       :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       :row-style="{cursor: 'pointer'}"
+      @selection-change="handleSelectionChange"
+      @sort-change="changeSort"
     >
       <el-table-column type="expand">
         <template #default={row}>
@@ -73,14 +75,14 @@
             <el-form-item label="备注">
               <span>{{ row.remark }}</span>
             </el-form-item>
-            <el-form-item label="题库名称">
+            <el-form-item label="归属题库">
               <span>{{ row.repositoryName }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column prop="questionId" label="试题编号" min-width="180" align="center" />
+      <el-table-column prop="questionId" label="试题编号" align="center" show-overflow-tooltip/>
       <el-table-column label="试题内容" prop="questionContent" min-width="300" align="left" show-overflow-tooltip>
         <template #default={row}>
           <router-link :to="'questionInfo/' + row.questionId" class="link-type">
@@ -108,7 +110,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" />
+      <!-- <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" /> -->
       <el-table-column prop="isEnable" label="状态" min-width="80" align="center">
         <template #default={row}>
           <el-tag v-if="row.isEnabled === 1">启用</el-tag>
@@ -117,7 +119,7 @@
       </el-table-column>
       <el-table-column label="操作" min-width="200" align="center">
         <template #default={row}>
-          <el-button type="text" size="mini" icon="el-icon-edit">修改</el-button>
+          <el-button type="text" size="mini" icon="el-icon-edit" @click="openUpdateDrawer(row)">修改</el-button>
           <el-button v-if="row.isEnabled === 0" type="text" icon="el-icon-check" size="mini">启用</el-button>
           <el-button v-if="row.isEnabled === 1" type="text" icon="el-icon-close" size="mini">弃用</el-button>
           <el-button type="text" size="mini" icon="el-icon-delete">删除</el-button>
@@ -144,41 +146,79 @@
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     />
+
+    <!-- 添加弹窗 -->
+    <el-drawer :with-header="false" title="添加试题" v-model="addDrawer" size="50%">
+      <question-add @closeCustomAddDrawer="closeCustomAddDrawer" @getQuestionByPage="getQuestionByPage" />
+    </el-drawer>
+    <!--
+      修改弹窗
+      :question="question" 用于传递参数对象
+    -->
+    <el-drawer :with-header="false" title="修改试题" v-model="updateDrawer" size="50%">
+      <question-update :question="question" @closeUpdateDrawer="closeUpdateDrawer" @getQuestionByPage="getQuestionByPage" />
+    </el-drawer>
 
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getQuestionByPage } from "../../../api/exam/question"
+import { getQuestionByPage, getQuestionWithOptionsAndAnswersById } from "../../../api/exam/question"
+import store from '../../../store/index'
+
+import QuestionAdd from './question-add.vue'
+import QuestionUpdate from './question-update.vue'
 
 export default defineComponent({
+  //  定义添加的组件 子组件/私有组件
+  components: {
+    QuestionAdd,
+    QuestionUpdate
+  },
   data() {
     return {
+      question: {},
       // 定义page对象
       page: {
         currentPage: 1, // 当前页
         pageSize: 20, // 每页显示条数
         totalPage: 0, // 总页数
         totalCount: 0, // 总条数
-        params: {}, // 查询参数对象
+        params: {
+          questionContent: undefined,
+          questionTime: undefined,
+          repositoryId: undefined,
+        }, // 查询参数对象
         list: [], // 数据
         sortColumn: 'createdTime', // 排序列
         sortMethod: 'asc' // 排序方式
       },
-      requestionList: [],
+      repositoryList: [
+        { repositoryId: 0, repositoryName: "xxx" },
+        { repositoryId: 1, repositoryName: "aaa" }
+      ],
       // 选中数组
       ids: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
+      selectQuestions: [], // 被选中的列
       loading: true, // 控制是否显示加载效果
+      addDrawer: false, // 控制添加抽屉显示
+      updateDrawer: false // 控制修改抽屉显示
     }
+  },
+  mounted() {
+    this.repositoryList = store.getters.repositoryList
   },
   created() {
     this.getQuestionByPage()
+
   },
   methods: {
     getQuestionByPage() {
@@ -186,6 +226,71 @@ export default defineComponent({
         this.page = res.data;
         this.loading = false
       })
+    },
+    // 页面功能组件
+    // 条件搜索
+    search() {
+      this.page.currentPage = 1
+      this.getQuestionByPage()
+    },
+    // 恢复搜索框
+    refresh() {
+      this.page.currentPage = 1
+      this.page.params.questionContent = undefined
+      this.page.params.questionTime = undefined
+      this.page.params.repositoryId = undefined
+      this.getQuestionByPage()
+    },
+    // 每页大小改变 参数 value 为每页大小(pageSize)
+    handleSizeChange(val) {
+      this.page.pageSize = val
+      // 重新请求,刷新页面
+      this.getQuestionByPage()
+    },
+    // 当前页跳转 参数 value 当前页(currentPage)
+    handleCurrentChange(val) {
+      this.page.currentPage = val
+      this.getQuestionByPage()
+    },
+    // 条件排序 e 和 val 都行
+    changeSort(e) {
+      if (e.order) {
+        this.page.sortColumn = e.prop
+        this.page.sortMethod = e.order
+      } else {
+        this.page.sortColumn = ''
+        this.page.sortMethod = 'asc'
+      }
+      this.getQuestionByPage()
+    },
+    // 数据表格的多选择框选择时触发
+    handleSelectionChange(selection) {
+      this.selectQuestions = selection.map(item => item.questionId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
+    },
+    openCustomAddDrawer() {
+      // 打开添加弹窗
+      this.addDrawer = true
+    },
+    // 修改
+    openUpdateDrawer(row) {
+      var id = row.questionId
+      if (id === undefined) {
+        id = this.selectQuestions[0]
+      }
+      getQuestionWithOptionsAndAnswersById(id).then(res => {
+        this.question = res.data
+        this.updateDrawer = true
+      })
+    },
+    closeCustomAddDrawer() {
+      // 关闭添加弹窗
+      this.addDrawer = false
+    },
+    closeUpdateDrawer() {
+      // 关闭修改弹窗
+      this.updateDrawer = false
     }
   }
 
@@ -193,9 +298,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .demo-form-inline {
+  /* .demo-form-inline {
     padding-top: 10px;
-  }
+  } */
   .demo-table-expand {
     font-size: 0;
   }

@@ -5,7 +5,7 @@
         <template #header class="clearfix">
           <span>试题信息</span>
           <el-button style="float: right; padding: 3px 0; margin-left: 20px" icon="el-icon-refresh" type="text">更新试题</el-button>
-          <el-button @click="goBack" type="text" style="float: right; padding: 3px 0" icon="el-icon-back">返回列表</el-button>
+          <el-button @click="close" type="text" style="float: right; padding: 3px 0" icon="el-icon-back">返回列表</el-button>
         </template>
         <el-row :gutter="20">
           <el-col :span="12">
@@ -56,14 +56,14 @@
           </el-col>
           <el-col :span="14">
             <el-form-item label="内容扩展">
-              <el-button>添加试题图片</el-button>
-              <el-button>添加试题视频</el-button>
-              <el-button>添加试题代码</el-button>
+              <el-button size="mini">添加图片</el-button>
+              <el-button size="mini">添加视频</el-button>
+              <el-button size="mini">添加代码</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="试题状态" prop="isEnabled">
-              <el-radio-group v-model="questionVo.isEnabled">
+              <el-radio-group v-model="question.isEnabled">
                 <el-radio :label="1">启用</el-radio>
                 <el-radio :label="0">弃用</el-radio>
               </el-radio-group>
@@ -102,35 +102,45 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="100px">
-            <template #default={row}>
-            <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="removeItem(row.$index)"/>
-            </template>
+            <el-button type="danger" icon="el-icon-delete" size="mini" circle />
           </el-table-column>
         </el-table>
       </el-card>
-      <!-- 分割线 -->
-      <!-- <el-divider />
-      <el-col :span="24">
-        <el-button type="primary" @click="onSubmit(questionVo)" style="float: right; margin-left: 20px" size="mini">保存</el-button>
-        <el-button @click="goBack" type="info"  style="float: right" size="mini">返回</el-button>
-      </el-col> -->
+      <el-row :gutter="20" type="flex" justify="center">
+        <el-col :span="12">
+          <el-form-item>
+            <el-button type="primary" @click="saveQuestionVo">提交</el-button>
+            <el-button @click="close">取消</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getQuestionWithOptionsAndAnswersById, updateQuestionWithOptionsAndAnswers } from "../../../api/exam/question";
+import { updateQuestionWithOptionsAndAnswers } from "../../../api/exam/question";
 import store from '../../../store/index'
 
 export default defineComponent({
+  // 父组件将数据传递给子组件
+  props: {
+    question: {
+      type: Object,
+      default: null
+    },
+    paperid: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
-      questionId: {},
-      repositoryList: [],
-      questionVo: {
-        optionList: []
-      },
+      // 题库列表
+      questionVo: this.question,
+      // 题库列表
+      repositoryList: store.getters.repositoryList,
       questionTypeList: [
         { dictLabel: '其它', dictValue: 0 },
         { dictLabel: '单选题', dictValue: 1 },
@@ -147,34 +157,52 @@ export default defineComponent({
         { dictLabel: '主观题', dictValue: 4 },
         { dictLabel: '客观题', dictValue: 5 }
       ],
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      loading: true, // 控制是否显示加载效果
-    };
+      // 表单校验
+      rules: {
+        questionTypeId: [
+          { type: 'date', required: true, message: '试题类型不能为空', tirgger: 'blur' }
+        ],
+        questionTagId: [
+          { type: 'date', required: true, message: '试题标签不能为空', tirgger: 'blur' }
+        ],
+        repositoryId: [
+          { required: true, message: '题库归属不能为空', tirgger: 'blur' }
+        ],
+        questionContent: [
+          { required: true, message: '试题内容不能为空', tirgger: 'blur' }
+        ],
+        isEnabled: [
+          { required: true, message: '请选择试题状态', trigger: 'change' }
+        ]
+      },
+      loading: false
+    }
   },
-  mounted() {
-    this.repositoryList = store.getters.repositoryList
-  },
-  created() {
-    this.getQuestionWithOptionsAndAnswersById();
+  watch: {
+    'question': function() {
+      this.questionVo = this.question
+    }
   },
   methods: {
-    getQuestionWithOptionsAndAnswersById() {
-      this.questionId = this.$route.params.questionId
-      getQuestionWithOptionsAndAnswersById(this.questionId).then((res) => {
-        this.questionVo = res.data;
-        this.loading = false
-      });
-    },
     saveQuestionVo() {
-      updateQuestionWithOptionsAndAnswers(this.questionVo).then(res => {
+      this.loading = true
+      console.log(this.paperid)
+      if (this.paperid === null || this.paperid === '') {
+        updateQuestionWithOptionsAndAnswers(this.questionVo).then(res => {
+          console.log('修改了试题!')
           this.$emit('closeUpdateDrawer')
           this.$emit('getQuestionByPage')
         })
+      }
+      // else {
+      //   this.questionVo.paperId = this.paperid
+      //   console.log('修改了试卷中的试题!')
+      //   updateQuestionVoForPaper(this.questionVo).then(res => {
+      //     this.$emit('closeUpdateDrawer')
+      //     this.$emit('getQuestionVoListByPaperId')
+      //     this.questionVo.optionList = []
+      //   })
+      // }
     },
     handleAdd() {
       this.questionVo.optionList.push({ isRight: 0, optionContent: '', analysis: '' })
@@ -182,11 +210,9 @@ export default defineComponent({
     removeItem(index) {
       this.questionVo.optionList.splice(index, 1)
     },
-    // 组件级别方法
-    goBack() {
-      this.$router.go(-1)
+    close() {
+      this.$emit('closeUpdateDrawer')
     }
-  },
+  }
 })
 </script>
-

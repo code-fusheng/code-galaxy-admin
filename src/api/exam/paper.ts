@@ -19,3 +19,9 @@ export const getPaperBaseInfoById = (id: any) => axios({
   url: `/${prefix_name}/getPaperBaseInfoById/${id}`,
   method: 'get'
 })
+
+export const savePaper = (data: any) => axios({
+  url: `/${prefix_name}/savePaper`,
+  method: 'post',
+  data
+})

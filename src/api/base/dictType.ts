@@ -8,7 +8,7 @@ export interface page {
   sortMethod: String
 }
 
-export interface dictTypeDto {
+export interface dictTypeDto  {
   dictId: String,
   dictName: String,
   dictType: number,

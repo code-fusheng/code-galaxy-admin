@@ -13,6 +13,14 @@
           <i class="el-icon-s-home"></i>
           <span>首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </template>
+        <el-menu-item-group>
+          <router-link to="/dashboard">
+            <el-menu-item>数据报表</el-menu-item>
+          </router-link>
+          <router-link to="/dashboard">
+            <el-menu-item>开发测试</el-menu-item>
+          </router-link>
+        </el-menu-item-group>
       </el-submenu>
       <!-- 基础管理 -->
       <el-submenu index="base">
@@ -47,6 +55,9 @@
           <span>考试管理</span>
         </template>
         <el-menu-item-group>
+          <router-link to="/exam/exam">
+            <el-menu-item>考试管理</el-menu-item>
+          </router-link>
           <router-link to="/exam/repository">
             <el-menu-item>题库管理</el-menu-item>
           </router-link>
@@ -83,7 +94,7 @@
   export default {
     data() {
       return {
-        isCollapse: false
+        isCollapse: true
       };
     },
     methods: {
@@ -99,10 +110,10 @@
 
 <style>
   aside {
-    width: 181px !important;
+    width: 65px !important;
   }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 180px !important;
+    width: 64px !important;
     min-height: 400px;
   }
   .el-submenu .el-menu-item {

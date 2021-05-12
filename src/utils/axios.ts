@@ -32,6 +32,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     (response) => {
         // console.log(response.data)
+        const msg = response.data.msg
+        // ElMessage.success(`${msg}`)
         return response.data
     },
     (error) => {

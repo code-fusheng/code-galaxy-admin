@@ -36,8 +36,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/exam',
     component: Layout,
-    redirect: '/exam/repository',
+    redirect: '/exam/exam',
     children: [
+      {
+        path: 'exam',
+        name: 'Exam',
+        component: () => import('@/views/exam/exam/exam-list.vue')
+      },
       {
         path: 'repository',
         name: 'Repository',

@@ -132,6 +132,72 @@
           </el-col>
         </el-row>
       </el-card>
+      <!-- 试题信息 -->
+      <el-card class="box-card" v-loading="questionLoading">
+        <template #header class="clearfix">
+          <span>试题信息</span>
+          <el-button style="float: right; padding: 3px 10px" icon="el-icon-refresh" type="text">更新试题</el-button>
+          <el-button style="float: right; padding: 3px 10px" icon="el-icon-video-play" type="text">生成试题</el-button>
+          <el-button style="float: right; padding: 3px 10px" icon="el-icon-edit" type="text">自定义试题</el-button>
+          <el-button style="float: right; padding: 3px 10px" icon="el-icon-view" type="text">显示/隐藏答案</el-button>
+        </template>
+          <el-card
+            v-for="(questionVo, questionIndex) in page.list"
+            :key="questionVo.questionId"
+          >
+            <el-row :gutter="20">
+              <div style="clear: both; float: none; width: 100%">
+                <el-col :span="1.5">
+                  <el-tag v-if="questionVo.questionType === 0" style="padding: 0 10px" size="mini">其它</el-tag>
+                  <el-tag v-else-if="questionVo.questionType === 1" style="padding: 0 10px" size="mini">单选题</el-tag>
+                  <el-tag v-else-if="questionVo.questionType === 2" style="padding: 0 10px" size="mini" type="danger">多选题</el-tag>
+                  <el-tag v-else-if="questionVo.questionType === 3" style="padding: 0 10px" size="mini" type="warning">填空题</el-tag>
+                  <el-tag v-else-if="questionVo.questionType === 4" style="padding: 0 10px" size="mini" type="success">判断题</el-tag>
+                  <el-tag v-else-if="questionVo.questionType === 5" style="padding: 0 10px" size="mini" type="info">简答题</el-tag>
+                </el-col>
+                <el-col :span="1.5">
+                  <el-tag type="danger" effect="plain" size="mini">
+                  <span>{{ questionVo.questionScore }} 分</span>
+                  </el-tag>
+                </el-col>
+                <div style="float: right; margin-right: 20px">
+                  <el-button style="float: right; margin-right: 20px" type="danger" icon="el-icon-delete" size="mini" circle/>
+                  <el-button style="float: right; margin-right: 20px" type="primary" icon="el-icon-edit" size="mini" circle/>
+                </div>
+              </div>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="24">
+                <span style="color: #909399">第{{ questionIndex + 1 }}题 </span><span> {{ questionVo.questionContent }}</span>
+              </el-col>
+            </el-row>
+            <!-- 单选、多选、判断 -->
+            <el-row v-for="(optionVo) in questionVo.optionList" :key="optionVo.optionId" :gutter="20">
+              <el-col :span="0.5">
+                <el-checkbox v-model="optionVo.isRight" :true-label="1" :false-label="0" :checked="optionVo.isRight === 1 ? true : false" />
+              </el-col>
+              <el-col :span="23.5">
+                <span :class="optionVo.isRight === 1 ? 'right-answer-content' : 'default-answer-content' ">{{ optionVo.optionContent }}</span>
+              </el-col>
+            </el-row>
+          </el-card>
+          <el-row type="flex" class="row-bg" justify="center">
+            <el-col :span="11">
+              <el-button class="filter-item" type="text" icon="el-icon-bottom">
+                加载更多
+              </el-button>
+              <el-button class="filter-item" type="text" icon="el-icon-plus">
+                添加自定义试题
+              </el-button>
+              <el-button class="filter-item" type="text" icon="el-icon-plus">
+                添加题库试题
+              </el-button>
+              <el-button class="filter-item" type="text" icon="el-icon-back">
+                返回
+              </el-button>
+            </el-col>
+          </el-row>
+      </el-card>
     </el-form>
   </div>
 </template>
@@ -140,10 +206,24 @@
 import { defineComponent } from 'vue'
 import { getPaperBaseInfoById } from '../../../api/exam/paper'
 import { getRuleById } from "../../../api/exam/rule"
+import { getQuestionAndOptionsWithAnswersByPageForPaperId } from '../../../api/exam/question'
+
 
 export default defineComponent({
   data() {
     return {
+      page: {
+        currentPage: 1,
+        pageSize: 50,
+        totalPage: 0,
+        totalCount: 0,
+        params: {
+          paperId: ''
+        },
+        list: [],
+        sortColumn: 'question_sort',
+        sortMethod: 'asc'
+      },
       paperId: {},
       paperVo: {
         paperId: '',
@@ -153,6 +233,13 @@ export default defineComponent({
         }
       },
       ruleVo: {},
+      questionVoList: [
+        {
+          questionId: '',
+          questionContent: '',
+          optionList: []
+        }
+      ],
       questionTypeList: [
         { dictLabel: '其它', dictValue: 0 },
         { dictLabel: '单选题', dictValue: 1 },
@@ -170,6 +257,7 @@ export default defineComponent({
         { dictLabel: '客观题', dictValue: 5 }
       ],
       loading: true, // 控制是否显示加载效果
+      questionLoading: true
     }
   },
   created() {
@@ -183,6 +271,7 @@ export default defineComponent({
         this.loading = false
         if (this.paperVo.ruleId !== undefined || this.paperVo.ruleId !== null) {
           this.getRuleById()
+          this.getQuestionAndOptionsWithAnswersByPageForPaperId()
         }
       })
     },
@@ -190,6 +279,13 @@ export default defineComponent({
       getRuleById(this.paperVo.ruleId).then((res) => {
         this.ruleVo = res.data
         console.log(this.ruleVo)
+      })
+    },
+    getQuestionAndOptionsWithAnswersByPageForPaperId() {
+      this.page.params.paperId = this.paperVo.paperId
+      getQuestionAndOptionsWithAnswersByPageForPaperId(this.page).then((res) => {
+        this.page = res.data
+        this.questionLoading = false
       })
     }
   }
@@ -205,8 +301,9 @@ export default defineComponent({
   .el-row {
     margin-bottom: 10px !important;
     margin-top: 10px !important;
-    line-height: 40px;
+    line-height: 28px;
   }
+
   .el-col {
     border-radius: 4px;
   }
@@ -214,5 +311,35 @@ export default defineComponent({
   .el-form-item {
     margin-bottom: 10px !important;
     margin-top: 10px !important;
+  }
+
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
+
+  .right-answer-content {
+    color: #67C23A;
+  }
+
+  .default-answer-content {
+    color: #606266;
+  }
+
+  .error-answer-content {
+    color: red;
   }
 </style>
