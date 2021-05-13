@@ -79,6 +79,33 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/exam/paper/paper-list.vue')
       },
     ]
+  },
+  {
+    path: "/sys",
+    component: Layout,
+    redirect: '/sys/sysLog',
+    children: [
+      {
+        path: 'sysLog',
+        name: 'SysLog',
+        component: () => import('@/views/sys/sysLog/sysLog-index.vue')
+      },
+      {
+        path: 'operaLog',
+        name: 'OperaLog',
+        component: () => import('@/views/sys/operaLog/operaLog-index.vue')
+      },
+      {
+        path: 'druid',
+        name: 'Druid',
+        component: () => import('@/views/sys/druid/druid-index.vue')
+      },
+      {
+        path: 'swagger',
+        name: 'Swagger',
+        component: () => import('@/views/sys/swagger/swagger-index.vue')
+      },
+    ]
   }
 ]
 

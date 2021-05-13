@@ -19,6 +19,7 @@ export default defineComponent({
     }
   },
   created() {
+    console.log(import.meta.env.VITE_APP_SWAGGER_URL)
     this.initData()
   },
   methods: {

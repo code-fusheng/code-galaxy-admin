@@ -2,15 +2,13 @@
   "name": "code-galaxy-admin",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite serve",
+    "build": "vite build --mode production"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.41",
     "vue": "^3.0.5",
-    "vue-class-component": "^7.2.6",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.0.6",
     "vuex": "^4.0.0"

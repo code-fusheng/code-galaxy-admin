@@ -11,7 +11,7 @@
       <el-main class="main">
         <router-view :key="key" />
       </el-main>
-      <el-footer class="footer"></el-footer>
+      <!-- <el-footer class="footer"></el-footer>s -->
     </el-container>
   </el-container>
   </div>
@@ -32,5 +32,7 @@ export default defineComponent({
 
 
 <style scoped>
-
+.main {
+  min-height: 540px;
+}
 </style>

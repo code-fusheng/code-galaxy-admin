@@ -86,6 +86,27 @@
           <el-menu-item index="4-2">文章管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+      <!-- 系统监控 -->
+      <el-submenu index="sys">
+        <template #title>
+          <i class="el-icon-odometer"></i>
+          <span>系统监控</span>
+        </template>
+        <el-menu-item-group>
+          <router-link to="/sys/sysLog">
+            <el-menu-item><i class="el-icon-odometer"></i> 系统日志</el-menu-item>
+          </router-link>
+          <router-link to="/sys/operaLog">
+            <el-menu-item><i class="el-icon-odometer"></i> 操作日志</el-menu-item>
+          </router-link>
+          <router-link to="/sys/druid">
+            <el-menu-item><i class="el-icon-coin"></i> DB 监控</el-menu-item>
+          </router-link>
+          <router-link to="/sys/swagger">
+            <el-menu-item><i class="el-icon-coin"></i> 接口文档</el-menu-item>
+          </router-link>
+        </el-menu-item-group>
+      </el-submenu>
     </el-menu>
   </div>
 </template>

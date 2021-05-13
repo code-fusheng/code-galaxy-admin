@@ -1,6 +1,6 @@
 <template>
   <div>
-    <iframe id="mobsf" src="http://localhost:9999/exam-admin-server/druid/login.html" scrolling="no" frameborder="0" />
+    <iframe id="mobsf" :src="swaggerUrl" scrolling="no" frameborder="0" />
   </div>
 </template>
 
@@ -8,14 +8,14 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-data() {
+  data() {
     return {
-      druidUrl: ''
+      swaggerUrl: ''
     }
   },
   created() {
-    this.druidUrl = import.meta.env.VITE_APP_DRUID_URL
-    console.log('druid ui:' + this.druidUrl)
+    this.swaggerUrl = import.meta.env.VITE_APP_SWAGGER_URL
+    console.log('swagger ui:' + this.swaggerUrl)
   },
   mounted() {
     /**
@@ -27,9 +27,7 @@ data() {
       const deviceHeight = document.documentElement.clientHeight || document.body.clientHeight
       mobsf.style.width = (Number(deviceWidth) - 100) + 'px' // 数字是页面布局宽度差值
       mobsf.style.height = (Number(deviceHeight) - 200) + 'px' // 数字是页面布局高度差
-      // mobsf.style.minHeight = '700px'
       mobsf.style.width = '100%'
-      mobsf.style.overflow = 'auto'
     }
 
     changeMobsfIframe()

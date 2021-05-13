@@ -21,11 +21,11 @@ export default defineConfig({
 
     // 配置代理转发
     proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: 'http://localhost:9999',
+      '/api': {
+        target: 'http://47.111.158.6:9999',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(process.env.VUE_APP_BASE_API, '/')
+        rewrite: (path) => path.replace('/api', '')
       }
     }
 

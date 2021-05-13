@@ -7,7 +7,7 @@ import store from '../store/index'
 const baseURL = 'http://localhost:9999'
 
 const axios = Axios.create({
-    baseURL,
+    baseURL: '/api',
     timeout: 20000
 })
 
