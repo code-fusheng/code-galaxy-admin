@@ -14,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index.vue')
       },
+      {
+        path: 'test',
+        name: 'test',
+        component: () => import('@/views/dashboard/test.vue')
+      },
     ]
   },
   {
@@ -34,6 +39,28 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/user',
+    children: [
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('@/views/user/user/user-list.vue')
+      },
+      {
+        path: 'role',
+        name: 'Role',
+        component: () => import('@/views/user/role/role-list.vue')
+      },
+      {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/user/menu/menu-list.vue')
+      }
+    ]
+  },
+  {
     path: '/exam',
     component: Layout,
     redirect: '/exam/exam',
@@ -42,6 +69,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'exam',
         name: 'Exam',
         component: () => import('@/views/exam/exam/exam-list.vue')
+      },
+      {
+        path: 'online-exam',
+        name: 'Online-exam',
+        component: ()  => import('@/views/exam/exam/online-exam.vue')
       },
       {
         path: 'repository',

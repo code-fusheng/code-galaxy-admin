@@ -7,7 +7,8 @@ const defaultState = {
     count: 0,
     token: '',
     repositoryList: [],
-    ruleList: []
+    ruleList: [],
+    user: {},
 }
 
 // 创建一个 store 实例
@@ -29,12 +30,15 @@ export default createStore({
         ),
         setRuleList: (state, ruleList) => (
           state.ruleList = ruleList
+        ),
+        setUser: (state, user) => (
+          state.user = user
         )
     },
     // action 提交操作 不直接更改状态 间接通过 mutations 去操作更新状态
     actions: {
         increment(context) {
-            context.commit('increment')
+          context.commit('increment')
         },
         setToken(token){
           console.log(token)
@@ -45,6 +49,9 @@ export default createStore({
         },
         setRuleList(ruleList) {
           ruleList.commit('ruleList')
+        },
+        setUser(user) {
+          user.commit('user')
         }
     },
     // 属性状态访问函数
@@ -60,6 +67,9 @@ export default createStore({
         },
         ruleList(state: typeof defaultState) {
           return state.ruleList
+        },
+        user(state: typeof defaultState) {
+          return state.user
         }
     }
 

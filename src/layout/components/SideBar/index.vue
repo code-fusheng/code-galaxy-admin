@@ -17,7 +17,7 @@
           <router-link to="/dashboard">
             <el-menu-item>数据报表</el-menu-item>
           </router-link>
-          <router-link to="/dashboard">
+          <router-link to="/test">
             <el-menu-item>开发测试</el-menu-item>
           </router-link>
         </el-menu-item-group>
@@ -36,16 +36,24 @@
         </el-menu-item-group>
       </el-submenu>
       <!-- 用户管理 -->
-      <el-submenu index="2">
+      <el-submenu index="user">
         <template #title>
           <i class="el-icon-user-solid"></i>
           <span>用户管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="2-1">用户管理</el-menu-item>
-          <el-menu-item index="2-2">角色管理</el-menu-item>
-          <el-menu-item index="2-3">权限管理</el-menu-item>
-          <el-menu-item index="2-4">部门管理</el-menu-item>
+          <router-link to="/user/user">
+            <el-menu-item>用户管理</el-menu-item>
+          </router-link>
+          <router-link to="/user/role">
+            <el-menu-item>角色管理</el-menu-item>
+          </router-link>
+          <router-link to="/user/menu">
+            <el-menu-item>权限管理</el-menu-item>
+          </router-link>
+          <router-link to="/user/org">
+            <el-menu-item>部门管理</el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <!-- 考试管理 -->

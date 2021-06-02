@@ -22,7 +22,7 @@ export default defineConfig({
     // 配置代理转发
     proxy: {
       '/api': {
-        target: 'http://47.111.158.6:9999',
+        target: 'http://localhost:9999',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace('/api', '')

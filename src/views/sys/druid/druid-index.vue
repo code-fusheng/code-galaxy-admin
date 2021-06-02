@@ -1,6 +1,6 @@
 <template>
   <div>
-    <iframe id="mobsf" src="http://localhost:9999/exam-admin-server/druid/login.html" scrolling="no" frameborder="0" />
+    <iframe id="mobsf" :src="druidUrl" scrolling="no" frameborder="0" />
   </div>
 </template>
 

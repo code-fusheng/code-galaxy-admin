@@ -26,6 +26,13 @@ export const getQuestionAndOptionsWithAnswersByPageForPaperId = (data: page) => 
   data
 })
 
+// 分页查询试卷试题详细信息
+export const getQuestionAndOptionsNotWithAnswersByPageForExam = (data: page) => axios({
+  url: `${prefix_name}/getQuestionAndOptionsNotWithAnswersByPageForExam`,
+  method: 'post',
+  data
+})
+
 // 添加试题
 export const saveQuestion = (data: any) => axios({
   url: `${prefix_name}/saveQuestion`,

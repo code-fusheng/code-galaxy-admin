@@ -10,7 +10,7 @@
 (2021/05/10 21:00 --- 2021/05/11 03:19) feature : 试卷管理 --- 新增试卷列表、试卷详情页
 (2021/05/12 10:00 --- 2021/05/13 02:19) feature : 系统完善
 (2021/05/13 02:25 --- 2021/05/13 04:17) fix : 资源配置 --- 修复 vite 根目录配置与 ts 冲突的问题
-(2021/05/13 09:00 --- 2021/05/14 01:06) build/feature : 工程部署/系统监控 --- 处理 vite 与 nginx 的代理转发问题，处理线上 302、404 等问题/新增系统监控相关页面(存在问题) 
+(2021/05/13 09:00 --- 2021/05/14 01:06) build/feature : 工程部署/系统监控 --- 处理 vite 与 nginx 的代理转发问题，新增生产开发环境变量配置/新增系统监控相关页面(存在问题) 
 ```
 
 ### 技术说明
@@ -112,7 +112,7 @@ server {
         gzip on;
         gzip_min_length 5k;
         gzip_buffers 4 16k;
-        #gzip_http_version 1.0;
+        gzip_http_version 1.0;
         gzip_comp_level 5;
         gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
         gzip_vary on;
@@ -137,10 +137,37 @@ server {
     }
 ```
 
+11、Echarts 图表库
+```shell script
+$ npm install echarts --save
+```
+```
+rsync -avz --progress  . root@47.111.158.6:/usr/local/nginx/code_galaxy_admin
+
+rsync -avz --progress  . root@175.24.45.179:/usr/local/nginx/code_galaxy_admin zH1314520?
+```
+
+12、$router & $route 路由传值
+>> PS: vue3 中 如果路由传参时使用了 path 将忽略 params 的参数。对 query 传参不影响
+```vue.js
+this.$router.push({
+  name: 'Online-exam',
+  params: {
+    examId: this.examId,
+    paperId: paperVo.paperId
+  }
+})
+```
+
 ### 后台界面元素设计
 #### SideBar 侧边栏
 
 #### NavBar 顶部导航栏（面包屑）
+
+### 常用指令
+```shell
+rsync -P "-e ssh -p 22221"  -avz --progress  . root@47.111.158.6:/root/App/code-galaxy/code-galaxy-admin
+```
 
 
 

@@ -131,7 +131,7 @@ export default defineComponent({
   methods: {
     getRepositoryByPage() {
       getRepositoryByPage(this.page).then((res) => {
-        this.page = res.data;
+        this.page = res.data
         this.loading = false
       });
     },

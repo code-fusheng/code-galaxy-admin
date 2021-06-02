@@ -25,3 +25,9 @@ export const savePaper = (data: any) => axios({
   method: 'post',
   data
 })
+
+// 获取考试选用试卷列表
+export const getPaperVoListByExamId = (id: any) => axios({
+  url: `/${prefix_name}/getPaperVoListByExamId/${id}`,
+  method: 'get'
+})

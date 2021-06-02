@@ -142,7 +142,7 @@
           <el-button style="float: right; padding: 3px 10px" icon="el-icon-view" type="text">显示/隐藏答案</el-button>
         </template>
           <el-card
-            v-for="(questionVo, questionIndex) in page.list"
+            v-for="(questionVo, questionIndex) in questionVoList"
             :key="questionVo.questionId"
           >
             <el-row :gutter="20">
@@ -183,7 +183,10 @@
           </el-card>
           <el-row type="flex" class="row-bg" justify="center">
             <el-col :span="11">
-              <el-button class="filter-item" type="text" icon="el-icon-bottom">
+              <el-button v-if="noMore" class="filter-item" disabled type="text" icon="el-icon-error">
+                到底了
+              </el-button>
+              <el-button v-else class="filter-item" type="text" icon="el-icon-bottom" :loading="loadingMore" @click="loadMore()">
                 加载更多
               </el-button>
               <el-button class="filter-item" type="text" icon="el-icon-plus">
@@ -207,6 +210,7 @@ import { defineComponent } from 'vue'
 import { getPaperBaseInfoById } from '@/api/exam/paper'
 import { getRuleById } from "@/api/exam/rule"
 import { getQuestionAndOptionsWithAnswersByPageForPaperId } from '@/api/exam/question'
+import store from '@/store/index'
 
 
 export default defineComponent({
@@ -214,7 +218,7 @@ export default defineComponent({
     return {
       page: {
         currentPage: 1,
-        pageSize: 50,
+        pageSize: 10,
         totalPage: 0,
         totalCount: 0,
         params: {
@@ -232,6 +236,7 @@ export default defineComponent({
 
         }
       },
+      ruleList: [],
       ruleVo: {},
       questionVoList: [
         {
@@ -256,9 +261,14 @@ export default defineComponent({
         { dictLabel: '主观题', dictValue: 4 },
         { dictLabel: '客观题', dictValue: 5 }
       ],
+      loadingMore: false,
+      noMore: false,
       loading: true, // 控制是否显示加载效果
       questionLoading: true
     }
+  },
+  mounted() {
+    this.ruleList = store.getters.ruleList
   },
   created() {
     this.paperId = this.$route.params.paperId
@@ -285,7 +295,25 @@ export default defineComponent({
       this.page.params.paperId = this.paperVo.paperId
       getQuestionAndOptionsWithAnswersByPageForPaperId(this.page).then((res) => {
         this.page = res.data
+        this.questionVoList = this.page.list
         this.questionLoading = false
+      })
+    },
+    // 加载更多
+    loadMore() {
+      this.page.currentPage += 1
+      this.loadingMore = true
+      getQuestionAndOptionsWithAnswersByPageForPaperId(this.page).then((res) => {
+        if (res.data.list.length < this.page.pageSize) {
+          (this as any).$message.warning('当前是最后一页了')
+          this.noMore = true
+        }
+        const dataList = res.data.list
+        this.loadingMore = false
+        dataList.forEach(item => {
+          this.questionVoList.push(item)
+        });
+        this.loadingMore = false
       })
     }
   }
