@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="progress-affix">
-      <el-progress type="circle" :percentage="80">
+      <el-progress type="circle" :percentage="isSelectRate">
         <template #default="{ percentage }">
           <span class="percentage-label">完成进度</span>
           <br />
@@ -111,20 +111,20 @@
           <!-- 单选、多选、判断 -->
             <el-row v-for="(optionVo) in questionVo.optionList" :key="optionVo.optionId" :gutter="20">
               <el-col :span="0.5">
-                <el-checkbox v-model="optionVo.isSelect" :true-label="1" :false-label="0" :checked="optionVo.isSelect === 1 ? true : false" />
+                <el-checkbox v-model="optionVo.isSelect" :true-label="1" :false-label="0" :checked="optionVo.isSelect === 1 ? true : false" @change="handleSelectOption(questionVo.questionId, optionVo.optionId)" />
               </el-col>
               <el-col :span="23.5">
                 <span :class="optionVo.isSelect === 1 ? 'right-answer-content' : 'default-answer-content' ">{{ optionVo.optionContent }}</span>
               </el-col>
             </el-row>
+            <!-- <el-checkbox v-for="(optionVo) in questionVo.optionList" :key="optionVo.optionId" :label="optionVo.optionId">{{ optionVo.optionContent }}</el-checkbox> -->
+            <!-- <el-checkbox-group v-model="questionVo.userOptions" @change="handleSelectOption">
+              <el-checkbox v-for="(optionVo) in questionVo.optionList" :key="optionVo.optionId" :label="optionVo.optionId">{{ optionVo.optionContent }}</el-checkbox>
+            </el-checkbox-group> -->
           <!-- <el-row :gutter="20">
-            <el-col :span="24"> -->
-              <!-- {{ questionVo.optionList }} -->
-                <!-- <el-checkbox-group v-model="questionVo.optionList" @change="handleSelectOption">
-                  {{ questionVo.optionList }}
-                  <el-checkbox v-for="(optionVo, optionIndex) in questionVo.optionVoList" :key="optionIndex" :label="optionVo.optionId">{{ optionVo.optionContent }}</el-checkbox>
-                </el-checkbox-group> -->
-            <!-- </el-col>
+            <el-col :span="24">
+
+            </el-col>
           </el-row> -->
         </el-card>
         <el-row type="flex" class="row-bg" justify="center">
@@ -162,7 +162,7 @@ export default defineComponent({
         currentPage: 1,
         pageSize: 10,
         totalPage: 0,
-        totalCount: 0,
+        totalCount: 65,
         params: {
           paperId: {},
         },
@@ -189,7 +189,7 @@ export default defineComponent({
             questionId: '',
             questiontype: '',
             questionScore: '',
-            optionList: []
+            optionList: {}
           }
         }
       ],
@@ -201,8 +201,8 @@ export default defineComponent({
             paperId: this.$route.params.paperId,
             examId: this.$route.params.examId,
             userId: store.getters.userId,
-            questionTypeId: '',
-            userAnswer: [],
+            questionType: '',
+            userOptions: [],
             questionScore: '',
             actualScore: '',
             isRight: '',
@@ -230,6 +230,8 @@ export default defineComponent({
       noMore: false,
       loading: true, // 控制是否显示加载效果
       questionLoading: true,
+      isSelectQuestionIdList: [],
+      isSelectRate: 0
     };
   },
   created() {
@@ -250,8 +252,9 @@ export default defineComponent({
       this.page.params.paperId = this.paperId;
       getQuestionAndOptionsNotWithAnswersByPageForExam(this.page).then(
         (res) => {
+          console.log(res)
           this.page = res.data;
-          this.questionVoList = this.page.list;
+          this.questionVoList = res.data.list;
           this.questionLoading = false;
         }
       );
@@ -276,8 +279,12 @@ export default defineComponent({
       );
     },
     // 选中答案
-    handleSelectOption(e) {
-      console.log(e);
+    handleSelectOption(key1: number, key2: number) {
+      console.log(key1, key2);
+      this.isSelectQuestionIdList.push(key2);
+      console.log(this.isSelectQuestionIdList.length)
+      console.log(this.page.totalCount)
+      this.isSelectRate = Math.ceil(this.isSelectQuestionIdList.length / 65 * 100)
     },
   },
 });
