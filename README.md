@@ -12,6 +12,7 @@
 (2021/05/13 02:25 --- 2021/05/13 04:17) fix : 资源配置 --- 修复 vite 根目录配置与 ts 冲突的问题
 (2021/05/13 09:00 --- 2021/05/14 01:06) build/feature : 工程部署/系统监控 --- 处理 vite 与 nginx 的代理转发问题，新增生产开发环境变量配置/新增系统监控相关页面(存在问题) 
 (2021/06/01 00:00 --- 2021/06/01 00:00) feature/fix : 在线考试/登录认证 --- 新增在线考试相关的实体以及考试试卷试题信息页
+(2021/06/28 00:00 --- 2021/06/29 23:00) feature : 新增通过域名实现单点登录、优化不同环境的跳转配置
 ```
 
 ### 技术说明
@@ -160,6 +161,12 @@ this.$router.push({
 })
 ```
 
+13、使用 cookie.js
+```
+npm install --save @types/js-cookie
+npm install --save js-cookie
+```
+
 ### 后台界面元素设计
 #### SideBar 侧边栏
 
@@ -167,6 +174,7 @@ this.$router.push({
 
 ### 常用指令
 ```shell
+X!code-galaxy?
 rsync -P "-e ssh -p 22221"  -avz --progress  . root@47.111.158.6:/root/App/code-galaxy/code-galaxy-admin
 ```
 

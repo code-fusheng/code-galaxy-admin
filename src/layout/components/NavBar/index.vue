@@ -3,6 +3,7 @@
     <!-- TODO 侧边栏控制 -->
     <!-- <i class="el-icon-caret-left side-controller"></i> -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item @click="changeSideBarState()"><i :class="sideBarState ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i></el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>活动管理</el-breadcrumb-item>
       <el-breadcrumb-item>活动列表</el-breadcrumb-item>
@@ -29,6 +30,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item icon="el-icon-s-custom">账户</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-right" divided @click="toLogin()">登入</el-dropdown-item>
             <el-dropdown-item icon="el-icon-right" divided>注销</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -39,16 +41,28 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import store from '@/store/index'
 
 export default defineComponent({
   data() {
     return {
       levelList: null,
+      sideBarState: false
     };
   },
   watch: {},
   created() {},
-  methods: {},
+  methods: {
+    toLogin() {
+      window.location.href = `http://localhost:7000?redirectURL=${window.location.href}`
+    },
+    changeSideBarState() {
+      this.sideBarState = !this.sideBarState
+      console.log(this.sideBarState)
+      store.commit('setSideBarState', this.sideBarState)
+      console.log(store.getters.sideBarState)
+    }
+  },
 });
 </script>
 

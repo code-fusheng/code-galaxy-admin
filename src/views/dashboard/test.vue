@@ -25,6 +25,8 @@ import axios from "@/utils/axios";
 import { login, info } from "@/api/user/login";
 import store from '@/store/index'
 
+const industryList = ['Apple', 'Pear', 'Orange'];
+const defaultCheckedList = ['Apple', 'Orange'];
 
 export default defineComponent({
   data() {
@@ -36,7 +38,7 @@ export default defineComponent({
         loginType: 0,
         username: "code-fusheng",
         password: "123456",
-      },
+      }
     };
   },
   methods: {
@@ -48,18 +50,14 @@ export default defineComponent({
     },
     login() {
       login(this.loginDto).then(res => {
-        this.token = res.data
+        this.token = res.data.access_token
         store.commit('setToken', this.token)
         console.log(store.getters.token)
-      })
-    },
-    info() {
-      info().then(res => {
-        this.user = res
+        this.user = res.data.userInfo
         store.commit('setUser', this.user)
         console.log(store.getters.user)
       })
-    }
+    },
   },
 });
 </script>

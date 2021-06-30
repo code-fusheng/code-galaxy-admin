@@ -28,13 +28,7 @@
           <el-button type="primary" icon="el-icon-plus" size="mini" @click="openAddDialog">添加</el-button>
         </el-col>
         <el-col :span="1.5">
-          <el-button
-            type="success"
-            icon="el-icon-edit"
-            size="mini"
-            :disabled="single"
-            @click="openUpdateDialog"
-          >修改</el-button>
+          <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="openUpdateDialog">修改</el-button>
         </el-col>
         <el-col :span="1.5">
           <el-button type="danger" icon="el-icon-delete" :disabled="single" size="mini">删除</el-button>
@@ -58,7 +52,7 @@
       >
         <el-table-column type="selection" align="center" width="45" />
         <el-table-column type="expand">
-          <template #defalut="{row}">
+          <template #default="{row}">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="真实姓名">
                 <span>{{ row.realname }}</span>
@@ -72,14 +66,20 @@
               <el-form-item label="地址">
                 <span>{{ row.address }}</span>
               </el-form-item>
+              <el-form-item label="经度">
+                <span>{{ row.lng }}</span>
+              </el-form-item>
+              <el-form-item label="纬度">
+                <span>{{ row.lat }}</span>
+              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
         <el-table-column type="index" label="#" align="center" />
-        <el-table-column prop="username" label="用户名(账号)" min-width="150" align="center" show-overflow-tooltip/>
+        <el-table-column prop="username" label="用户名" min-width="120" align="center" show-overflow-tooltip/>
         <el-table-column prop="phone" label="电话" min-width="120" align="center" />
-        <el-table-column prop="mail" label="邮箱" min-width="200" align="center" show-overflow-tooltip/>
-        <el-table-column prop="sex" label="性别" width="60" align="center">
+        <el-table-column prop="mail" label="邮箱" min-width="180" align="center" show-overflow-tooltip/>
+        <el-table-column prop="sex" label="性别" width="80" align="center">
           <template #default="{row}">
             <el-tag v-if="row.sex === 0" type="info">私密</el-tag>
             <el-tag v-if="row.sex === 1">男</el-tag>
@@ -95,9 +95,8 @@
             />
           </template>
         </el-table-column>
-        <el-table-column
-          prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" show-overflow-tooltip/>
-        <!-- <el-table-column prop="updatedTime" label="更新时间" min-width="220" align="center" sortable="custom"/>s -->
+        <el-table-column prop="createdTime" label="创建时间" min-width="160" align="center" sortable="custom" show-overflow-tooltip/>
+        <el-table-column prop="updatedTime" label="更新时间" min-width="160" align="center" sortable="custom"/>
         <el-table-column prop="isEnabled" label="状态" width="100" align="center">
           <template #default="{row}">
             <el-tag v-if="row.isEnabled === 1">启用</el-tag>
@@ -106,25 +105,9 @@
         </el-table-column>
         <el-table-column label="操作" min-width="300" align="center">
           <template #default="{row}">
-            <el-button
-              v-if="row.userId!=1"
-              type="success"
-              icon="el-icon-thumb"
-              size="mini"
-              @click="handleSelectRole(row)"
-            >分配角色</el-button>
-            <el-button
-              size="mini"
-              type="primary"
-              icon="el-icon-edit"
-            >修改</el-button>
-            <el-button
-              v-if="row.userId != 1"
-              size="mini"
-              type="danger"
-              icon="el-icon-delete"
-              @click="toDelete(row.userId)"
-            >删除</el-button>
+            <el-button v-if="row.userId!=1" type="success" icon="el-icon-thumb" size="mini" @click="handleSelectRole(row)">分配角色</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-edit" @click="openUpdateDialog(row)">修改</el-button>
+            <el-button v-if="row.userId != 1" size="mini" type="danger" icon="el-icon-delete" @click="toDelete(row.userId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -141,6 +124,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
+
     <!-- 分配角色的弹出层开始 -->
     <el-dialog
       title="分配角色"
@@ -171,12 +155,22 @@
     </el-dialog>
     <!-- 分配角色的弹出层结束 -->
 
+    <!-- 用户添加弹出层 -->
+    <el-dialog title="添加用户" v-model="addDialog" width="80%">
+      <user-add @closeAddDialog="closeAddDialog" @getUserByPage="getUserByPage" />
+    </el-dialog>
+
+    <!-- 用户更新弹出层 -->
+    <el-dialog title="修改用户" v-model="updateDialog" width="80%">
+      <user-update :user="user" @closeUpdateDialog="closeUpdateDialog" @getUserByPage="getUserByPage" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import { getUserByPage } from "@/api/user/user";
+import { getUserByPage, getUserById } from "@/api/user/user";
 import { getRoleList, getRoleIdsByUserId } from "@/api/user/role";
 
 import UserAdd from "./user-add.vue";
@@ -189,6 +183,7 @@ export default defineComponent({
   },
   data() {
     return {
+      user:{},
       page: {
         currentPage: 1,
         pageSize: 10,
@@ -330,3 +325,20 @@ export default defineComponent({
 });
 </script>
 
+<style scoped>
+  .demo-form-inline {
+    padding-top: 10px;
+  }
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>

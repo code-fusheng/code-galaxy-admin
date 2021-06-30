@@ -17,14 +17,37 @@ export interface dictDataDto {
   remark: String
 }
 
+// 添加字典数据
+export const saveDictData = (data: any) => axios({
+  url: `/${prefix_name}/saveDictData`,
+  method: 'post',
+  data
+})
+
+// 批量删除字典数据
+export const deleteDictDataByCodes = (data: any) => axios({
+  url: `/${prefix_name}/deleteDictDataByCodes`,
+  method: 'delete',
+  data
+})
+
+// 修改字典数据
+export const updateDictData = (data: any) => axios({
+  url: `/${prefix_name}/updateDictData`,
+  method: 'put',
+  data
+})
+
+// 根据Code获取字典数据详情
+export const getDictDataByCode = (code: number) => axios({
+  url: `/${prefix_name}/getDictDataByCode/${code}`,
+  method: 'get'
+})
+
+// 分页查询字典数据列表
 export const getDictDataByPage = (data: page) => axios({
   url: `/${prefix_name}/getDictDataByPage`,
   method: 'post',
   data
 })
 
-export const saveDictData = (data: dictDataDto) => axios({
-  url: `/${prefix_name}/saveDataType`,
-  method: 'post',
-  data
-})

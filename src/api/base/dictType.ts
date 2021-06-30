@@ -15,14 +15,39 @@ export interface dictTypeDto  {
   remark: String
 }
 
+// 添加字典类型
+export const saveDictType = (data: any) => axios({
+  url: `/${prefix_name}/saveDictType`,
+  method: 'post',
+  data
+})
+
+// 批量删除字典类型
+export const deleteDictTypeByIds = (data: any) => axios({
+  url: `/${prefix_name}/deleteDictTypeByIds`,
+  method: 'delete',
+  data
+})
+
+// 修改字典类型
+export const updateDictType = (data: any) => axios({
+  url: `/${prefix_name}/updateDictType`,
+  method: 'put',
+  data
+})
+
+// 根据Id获取字典类型详情
+export const getDictTypeById = (id: number) => axios({
+  url: `/${prefix_name}/getDictTypeById/${id}`,
+  method: 'get'
+})
+
+// 分页查询字典类型列表
 export const getDictTypeByPage = (data: page) => axios({
   url: `/${prefix_name}/getDictTypeByPage`,
   method: 'post',
   data
 })
 
-export const saveDictType = (data: dictTypeDto) => axios({
-  url: `/${prefix_name}/saveDictType`,
-  method: 'post',
-  data
-})
+
+

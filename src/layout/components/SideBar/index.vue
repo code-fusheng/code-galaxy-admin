@@ -5,7 +5,7 @@
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
-      :collapse="isCollapse"
+      :collapse="$store.getters.sideBarState"
     >
       <!-- 首页 -->
       <el-submenu index="dashboard">
@@ -51,7 +51,7 @@
           <router-link to="/user/menu">
             <el-menu-item>权限管理</el-menu-item>
           </router-link>
-          <router-link to="/user/org">
+          <router-link to="/">
             <el-menu-item>部门管理</el-menu-item>
           </router-link>
         </el-menu-item-group>
@@ -102,16 +102,24 @@
         </template>
         <el-menu-item-group>
           <router-link to="/sys/sysLog">
-            <el-menu-item><i class="el-icon-odometer"></i> 系统日志</el-menu-item>
+            <el-menu-item>
+              <i class="el-icon-odometer"></i> 系统日志
+            </el-menu-item>
           </router-link>
           <router-link to="/sys/operaLog">
-            <el-menu-item><i class="el-icon-odometer"></i> 操作日志</el-menu-item>
+            <el-menu-item>
+              <i class="el-icon-odometer"></i> 操作日志
+            </el-menu-item>
           </router-link>
           <router-link to="/sys/druid">
-            <el-menu-item><i class="el-icon-coin"></i> DB 监控</el-menu-item>
+            <el-menu-item>
+              <i class="el-icon-coin"></i> DB 监控
+            </el-menu-item>
           </router-link>
           <router-link to="/sys/swagger">
-            <el-menu-item><i class="el-icon-coin"></i> 接口文档</el-menu-item>
+            <el-menu-item>
+              <i class="el-icon-coin"></i> 接口文档
+            </el-menu-item>
           </router-link>
         </el-menu-item-group>
       </el-submenu>
@@ -119,40 +127,47 @@
   </div>
 </template>
 
-<script>
-  export default {
-    data() {
-      return {
-        isCollapse: true
-      };
+<script lang="ts">
+import store from '@/store/index'
+export default {
+  data() {
+    return {
+    };
+  },
+  methods: {
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
     },
-    methods: {
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      }
-    }
-  }
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+  },
+};
 </script>
 
 <style>
-  aside {
-    width: 65px !important;
-  }
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 64px !important;
-    min-height: 400px;
-  }
-  .el-submenu .el-menu-item {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 45px;
-    min-width: 180px !important;
-    color: black !important;
-  }
-  a {
-    text-decoration: none;
-  }
+aside {
+  width: auto;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: auto;
+  min-height: 400px;
+}
+.el-menu--collapse {
+  width: 64px;
+  height: 690px !important;
+}
+.el-submenu .el-menu-item {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 45px;
+  color: black !important;
+}
+a {
+  text-decoration: none;
+}
+
+aside {
+  width: auto !important;
+}
 </style>

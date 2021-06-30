@@ -1,5 +1,5 @@
 <template>
-  <div class="dicttype-container">
+  <div class="dictType-container">
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
       <el-form-item label="类型名称">
@@ -8,36 +8,30 @@
       <el-form-item label="类型标识">
         <el-input v-model="page.params.dictType" placeholder="请输入类型标识" clearable />
       </el-form-item>
-      <!-- <el-form-item label="起始日期">
+      <el-form-item label="起始日期">
         <el-date-picker
-          v-model="page.params.typeTime"
-          type="daterange"
-          align="right"
-          unlink-panels
+          v-model="page.params.dictTypeTime"
+          type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['00:00:00', '23:59:59']"
-          :picker-options="pickerOptions"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd HH:mm:ss"
-        />
-      </el-form-item> -->
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" sizi="mini">查询</el-button>
-        <el-button type="success" icon="el-icon-refresh-left" size="mini">恢复</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="search">查询</el-button>
+        <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格工具按钮开始 -->
     <el-row :gutter="10" style="margin-bottom: 8px;">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini">新增</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="openAddDialog">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single">修改</el-button>
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="openUpdateDialog">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple">删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="toDelete">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" icon="el-icon-refresh" size="mini">缓存同步</el-button>
@@ -59,34 +53,35 @@
       style="width: 100%"
       :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       :row-style="{cursor: 'pointer'}"
+      @selection-change="handleSelectionChange"
+      @sort-change="changeSort"
     >
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column prop="dictName" label="类型名称" min-width="180" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictType" label="字典类型" min-width="180" align="center" :show-overflow-tooltip="true">
+      <el-table-column prop="dictName" label="类型名称" width="120" align="center" show-overflow-tooltip />
+      <el-table-column prop="dictType" label="字典类型" width="180" align="center" show-overflow-tooltip>
         <template #default={row}>
           <router-link :to="'/base/dictData/' + row.dictType" class="link-type">
             <span>{{ row.dictType }}</span>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="createdTime" label="创建时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="updatedTime" label="更新时间" min-width="180" align="center" sortable="custom" />
-      <el-table-column prop="createdName" label="创建者" min-width="120" align="center" />
-      <el-table-column prop="updatorName" label="更新者" min-width="120" align="center" />
-      <el-table-column prop="remark" label="备注" min-width="120" align="center" show-overflow-tooltip />
-      <el-table-column prop="isEnabled" label="状态" min-width="100" align="center">
+      <el-table-column prop="createdTime" label="创建时间" width="160" align="center" sortable="custom" />
+      <el-table-column prop="updatedTime" label="更新时间" width="160" align="center" sortable="custom" />
+      <el-table-column prop="creatorName" label="创建者" width="120" align="center" show-overflow-tooltip  />
+      <el-table-column prop="updaterName" label="更新者" width="120" align="center" show-overflow-tooltip  />
+      <el-table-column prop="remark" label="备注" width="120" align="center" show-overflow-tooltip />
+      <el-table-column prop="isEnabled" label="状态" width="80" align="center">
         <template #default={row}>
           <el-tag v-if="row.isEnabled === 1">启用</el-tag>
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="300" align="center">
+      <el-table-column label="操作" min-width="180" align="center">
         <template #default={row}>
-          <el-button type="text" size="mini" icon="el-icon-edit" >修改</el-button>
-          <el-button type="text" size="mini" icon="el-icon-view" >查看</el-button>
+          <el-button type="text" size="mini" icon="el-icon-edit" @click="openUpdateDialog(row)">修改</el-button>
           <el-button v-if="row.isEnabled === 0" type="text" icon="el-icon-check" size="mini" >启用</el-button>
           <el-button v-if="row.isEnabled === 1" type="text" icon="el-icon-close" size="mini" >弃用</el-button>
-          <el-button type="text" size="mini" icon="el-icon-delete" >删除</el-button>
+          <el-button type="text" size="mini" icon="el-icon-delete" @click="toDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -113,23 +108,49 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+
+    <!-- 添加弹窗 -->
+    <el-dialog title="添加字典类型" v-model="addDialog">
+      <type-add @closeAddDialog="closeAddDialog" @getDictTypeByPage="getDictTypeByPage" />
+    </el-dialog>
+    <!--
+      修改弹窗
+      :type="type" 用于传递参数对象
+    -->
+    <el-dialog title="修改字典类型" v-model="updateDialog">
+      <type-update :type="type" @closeUpdateDialog="closeUpdateDialog" @getDictTypeByPage="getDictTypeByPage" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getDictTypeByPage } from '@/api/base/dictType'
+import { getDictTypeByPage, getDictTypeById, deleteDictTypeByIds } from '@/api/base/dictType'
+import { ElMessageBox, ElMessage } from 'element-plus'
+
+import TypeAdd from './type-add.vue'
+import TypeUpdate from './type-update.vue'
 
 export default defineComponent({
+  components: {
+    TypeAdd,
+    TypeUpdate
+  },
   data() {
     return {
-      pickerOptions: {},
+      type: {},
+      dictTypeTime: {},
       page: {
         currentPage: 1,
         pageSize: 10,
         totalPage: 0,
         totalCount: 0,
-        params: {},
+        params: {
+          dictName: '',
+          dictType: '',
+          dictTypeTime: undefined
+        },
         list: [],
         sortColumn: 'created_time',
         sortMethod: 'asc'
@@ -142,6 +163,8 @@ export default defineComponent({
       // 非多个禁用
       multiple: true,
       selectTypes: [], // 被选中的列
+      addDialog: false, // 控制添加弹窗显示
+      updateDialog: false // 控制修改弹窗显示
     }
   },
   created() {
@@ -149,10 +172,68 @@ export default defineComponent({
   },
   methods: {
     getDictTypeByPage() {
+      this.loading = true
       getDictTypeByPage(this.page).then((res) => {
         this.page = res.data
         this.loading = false
       })
+    },
+    openAddDialog() {
+      this.addDialog = true
+    },
+    openUpdateDialog(row: any) {
+      var id: number = row.dictId
+      if (id === undefined) {
+        id = this.selectTypes[0]
+      }
+      getDictTypeById(id).then(res => {
+        this.type = res.data
+        this.updateDialog = true
+      })
+    },
+    closeAddDialog() {
+      // 关闭添加弹窗
+      this.addDialog = false
+    },
+    closeUpdateDialog() {
+      // 关闭修改弹窗
+      this.updateDialog = false
+    },
+    // 删除
+    toDelete(row: any) {
+      let ids: any[] = []
+      if (row.dictId == undefined) {
+        ids = this.selectTypes
+      } else {
+        var id: any = row.dictId
+        ids.push(id)
+      }
+      console.log('批量删除' + ids)
+      ElMessageBox.confirm('是否删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteDictTypeByIds(ids).then(res => {
+          this.getDictTypeByPage()
+        })
+      }).catch(() => {
+        ElMessage.info('操作提示: 已取消删除!')
+      })
+    },
+    // 页面功能组件
+    // 条件搜索
+    search() {
+      this.page.currentPage = 1
+      this.getDictTypeByPage()
+    },
+    // 恢复搜索框
+    refresh() {
+      this.page.currentPage = 1
+      this.page.params.dictName = ''
+      this.page.params.dictType = ''
+      this.page.params.dictTypeTime = undefined
+      this.getDictTypeByPage()
     },
     // 每页大小改变 参数 value 为每页大小(pageSize)
     handleSizeChange(val) {
