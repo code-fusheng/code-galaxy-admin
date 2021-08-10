@@ -13,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="getMenuByPage">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="pageMenu">查询</el-button>
         <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">重置</el-button>
       </el-form-item>
             <!-- 表格工具按钮开始 -->
@@ -86,7 +86,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { getMenuByPage } from '@/api/user/menu'
+import { pageMenu } from '@/api/user/menu'
 
 export default defineComponent({
   data() {
@@ -110,11 +110,11 @@ export default defineComponent({
     }
   },
   created() {
-    this.getMenuByPage()
+    this.pageMenu()
   },
   methods: {
-    getMenuByPage() {
-      getMenuByPage(this.page).then((res) => {
+    pageMenu() {
+      pageMenu(this.page).then((res) => {
         this.page = res.data
         this.loading = false
       })

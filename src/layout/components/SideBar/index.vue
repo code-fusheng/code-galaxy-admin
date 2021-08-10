@@ -32,7 +32,7 @@
           <router-link to="/base/dictType">
             <el-menu-item>字典类型</el-menu-item>
           </router-link>
-          <el-menu-item index="1-2">公告管理</el-menu-item>
+          <!-- <el-menu-item index="1-2">公告管理</el-menu-item> -->
         </el-menu-item-group>
       </el-submenu>
       <!-- 用户管理 -->
@@ -84,14 +84,18 @@
         </el-menu-item-group>
       </el-submenu>
       <!-- 文章管理 -->
-      <el-submenu index="4">
+      <el-submenu index="article">
         <template #title>
           <i class="el-icon-reading"></i>
           <span>文章管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="4-1">类型管理</el-menu-item>
-          <el-menu-item index="4-2">文章管理</el-menu-item>
+          <router-link to="/article/category">
+            <el-menu-item>类型管理</el-menu-item>
+          </router-link>
+          <router-link to="/article/article">
+            <el-menu-item>文章管理</el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <!-- 系统监控 -->
@@ -104,6 +108,11 @@
           <router-link to="/sys/sysLog">
             <el-menu-item>
               <i class="el-icon-odometer"></i> 系统日志
+            </el-menu-item>
+          </router-link>
+          <router-link to="/sys/loginLog">
+            <el-menu-item>
+              <i class="el-icon-odometer"></i> 登录日志
             </el-menu-item>
           </router-link>
           <router-link to="/sys/operaLog">

@@ -77,7 +77,7 @@ export default {
       updateDictData(this.dictData).then(res => {
         this.eventLoading = false
         this.$emit('closeUpdateDialog')
-        this.$emit('getDictDataByPage')
+        this.$emit('pageDictData')
       })
     },
     close() {

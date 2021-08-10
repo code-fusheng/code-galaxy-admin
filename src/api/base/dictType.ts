@@ -1,5 +1,5 @@
 import axios from '../../utils/axios'
-var prefix_name = 'base-admin-server/dict/type'
+var prefix_name = 'sys-server/admin/dict/type'
 
 export interface page {
   pageSize: number,
@@ -23,8 +23,8 @@ export const saveDictType = (data: any) => axios({
 })
 
 // 批量删除字典类型
-export const deleteDictTypeByIds = (data: any) => axios({
-  url: `/${prefix_name}/deleteDictTypeByIds`,
+export const deleteDictType = (data: any) => axios({
+  url: `/${prefix_name}/deleteDictType`,
   method: 'delete',
   data
 })
@@ -37,14 +37,14 @@ export const updateDictType = (data: any) => axios({
 })
 
 // 根据Id获取字典类型详情
-export const getDictTypeById = (id: number) => axios({
-  url: `/${prefix_name}/getDictTypeById/${id}`,
+export const infoDictType = (id: number) => axios({
+  url: `/${prefix_name}/infoDictType/${id}`,
   method: 'get'
 })
 
 // 分页查询字典类型列表
-export const getDictTypeByPage = (data: page) => axios({
-  url: `/${prefix_name}/getDictTypeByPage`,
+export const pageDictType = (data: page) => axios({
+  url: `/${prefix_name}/pageDictType`,
   method: 'post',
   data
 })

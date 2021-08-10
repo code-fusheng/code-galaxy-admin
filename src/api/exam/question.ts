@@ -1,5 +1,5 @@
 import axios from '../../utils/axios'
-var prefix_name = 'exam-admin-server/question'
+var prefix_name = 'exam-server/admin/question'
 
 export interface page {
   pageSize: number,

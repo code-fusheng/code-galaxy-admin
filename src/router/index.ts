@@ -113,6 +113,23 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/article",
+    component: Layout,
+    redirect: '/article/article',
+    children: [
+      {
+        path: 'category',
+        name: 'Category',
+        component: () => import('@/views/article/category/category-list.vue')
+      },
+      {
+        path: 'article',
+        name: 'Article',
+        component: () => import('@/views/article/article/article-list.vue')
+      }
+    ]
+  },
+  {
     path: "/sys",
     component: Layout,
     redirect: '/sys/sysLog',
@@ -121,6 +138,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'sysLog',
         name: 'SysLog',
         component: () => import('@/views/sys/sysLog/sysLog-index.vue')
+      },
+      {
+        path: 'loginLog',
+        name: 'LoginLog',
+        component: () => import('@/views/sys/loginLog/loginLog-index.vue')
       },
       {
         path: 'operaLog',

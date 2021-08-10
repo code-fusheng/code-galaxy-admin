@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { error } from 'node:console';
 import store from '../store/index';
+import {PcCookie, Key} from '@/utils/cookie'
 
 const baseURL = 'http://localhost:9999';
 
@@ -36,10 +37,18 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.data) {
-      const code = error.response.status;
-      const { msg } = error.response.data;
+      const status = error.response.status;
+      const { msg, code } = error.response.data;
       ElMessage.error(`Code:${code}, Message:${msg}`);
       console.error('[Axios Error], error.response');
+      console.log(error.response)
+      if ( code == 10004 || code == 401) {
+        if (import.meta.env.VITE_APP_MARK == 'dev') {
+          setTimeout(window.location.href = `http://localhost:7000?redirectURL=${window.location.href}` , 3000)
+        } else {
+          setTimeout(window.location.href = `http://login.fusheng.xyz:7000?redirectURL=${window.location.href}`, 3000)
+        }
+      }
     } else {
       ElMessage.error(`${error}`);
     }

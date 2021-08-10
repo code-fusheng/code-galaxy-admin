@@ -1,5 +1,5 @@
 import axios from '../../utils/axios'
-var prefix_name = 'exam-admin-server/rule'
+var prefix_name = 'exam-server/admin/rule'
 
 export interface page {
   pageSize: number,

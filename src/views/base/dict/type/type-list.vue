@@ -57,18 +57,18 @@
       @sort-change="changeSort"
     >
       <el-table-column type="selection" width="50" align="center" />
-      <el-table-column prop="dictName" label="类型名称" width="120" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictType" label="字典类型" width="180" align="center" show-overflow-tooltip>
+      <el-table-column prop="dictName" label="类型名称" min-width="120" align="center" show-overflow-tooltip />
+      <el-table-column prop="dictType" label="字典类型" min-width="180" align="center" show-overflow-tooltip>
         <template #default={row}>
           <router-link :to="'/base/dictData/' + row.dictType" class="link-type">
             <span>{{ row.dictType }}</span>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="createdTime" label="创建时间" width="160" align="center" sortable="custom" />
-      <el-table-column prop="updatedTime" label="更新时间" width="160" align="center" sortable="custom" />
-      <el-table-column prop="creatorName" label="创建者" width="120" align="center" show-overflow-tooltip  />
-      <el-table-column prop="updaterName" label="更新者" width="120" align="center" show-overflow-tooltip  />
+      <el-table-column prop="createdTime" label="创建时间" min-width="160" align="center" sortable="custom" />
+      <el-table-column prop="updatedTime" label="更新时间" min-width="160" align="center" sortable="custom" />
+      <el-table-column prop="creatorName" label="创建者" min-width="120" align="center" show-overflow-tooltip  />
+      <el-table-column prop="updaterName" label="更新者" min-width="120" align="center" show-overflow-tooltip  />
       <el-table-column prop="remark" label="备注" width="120" align="center" show-overflow-tooltip />
       <el-table-column prop="isEnabled" label="状态" width="80" align="center">
         <template #default={row}>
@@ -111,14 +111,14 @@
 
     <!-- 添加弹窗 -->
     <el-dialog title="添加字典类型" v-model="addDialog">
-      <type-add @closeAddDialog="closeAddDialog" @getDictTypeByPage="getDictTypeByPage" />
+      <type-add @closeAddDialog="closeAddDialog" @pageDictType="pageDictType" />
     </el-dialog>
     <!--
       修改弹窗
       :type="type" 用于传递参数对象
     -->
     <el-dialog title="修改字典类型" v-model="updateDialog">
-      <type-update :type="type" @closeUpdateDialog="closeUpdateDialog" @getDictTypeByPage="getDictTypeByPage" />
+      <type-update :type="type" @closeUpdateDialog="closeUpdateDialog" @pageDictType="pageDictType" />
     </el-dialog>
 
   </div>
@@ -126,7 +126,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getDictTypeByPage, getDictTypeById, deleteDictTypeByIds } from '@/api/base/dictType'
+import { pageDictType, infoDictType, deleteDictType } from '@/api/base/dictType'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 import TypeAdd from './type-add.vue'
@@ -168,12 +168,12 @@ export default defineComponent({
     }
   },
   created() {
-    this.getDictTypeByPage()
+    this.pageDictType()
   },
   methods: {
-    getDictTypeByPage() {
+    pageDictType() {
       this.loading = true
-      getDictTypeByPage(this.page).then((res) => {
+      pageDictType(this.page).then((res) => {
         this.page = res.data
         this.loading = false
       })
@@ -186,7 +186,7 @@ export default defineComponent({
       if (id === undefined) {
         id = this.selectTypes[0]
       }
-      getDictTypeById(id).then(res => {
+      infoDictType(id).then(res => {
         this.type = res.data
         this.updateDialog = true
       })
@@ -214,8 +214,8 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteDictTypeByIds(ids).then(res => {
-          this.getDictTypeByPage()
+        deleteDictType(ids).then(res => {
+          this.pageDictType()
         })
       }).catch(() => {
         ElMessage.info('操作提示: 已取消删除!')
@@ -225,7 +225,7 @@ export default defineComponent({
     // 条件搜索
     search() {
       this.page.currentPage = 1
-      this.getDictTypeByPage()
+      this.pageDictType()
     },
     // 恢复搜索框
     refresh() {
@@ -233,18 +233,18 @@ export default defineComponent({
       this.page.params.dictName = ''
       this.page.params.dictType = ''
       this.page.params.dictTypeTime = undefined
-      this.getDictTypeByPage()
+      this.pageDictType()
     },
     // 每页大小改变 参数 value 为每页大小(pageSize)
     handleSizeChange(val) {
       this.page.pageSize = val
       // 重新请求,刷新页面
-      this.getDictTypeByPage()
+      this.pageDictType()
     },
     // 当前页跳转 参数 value 当前页(currentPage)
     handleCurrentChange(val) {
       this.page.currentPage = val
-      this.getDictTypeByPage()
+      this.pageDictType()
     },
     // 条件排序 e 和 val 都行
     changeSort(e) {
@@ -255,7 +255,7 @@ export default defineComponent({
         this.page.sortColumn = ''
         this.page.sortMethod = 'asc'
       }
-      this.getDictTypeByPage()
+      this.pageDictType()
     },
     // 数据表格的多选择框选择时触发
     handleSelectionChange(selection) {

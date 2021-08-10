@@ -75,7 +75,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { getRoleList } from '@/api/user/role'
+import { listRole } from '@/api/user/role'
 import { getMenuList, getMenuIdsByRoleId } from '@/api/user/menu'
 
 export default defineComponent({
@@ -100,11 +100,11 @@ export default defineComponent({
     }
   },
   created() {
-    this.getRoleList()
+    this.listRole()
   },
   methods: {
-    getRoleList() {
-      getRoleList().then((res) => {
+    listRole() {
+      listRole().then((res) => {
         this.roleList = res.data
         this.loading = false
       })

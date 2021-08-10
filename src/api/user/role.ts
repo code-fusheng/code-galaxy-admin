@@ -1,5 +1,5 @@
 import axios from '@/utils/axios'
-var prefix_name = 'user-admin-server/role'
+var prefix_name = 'user-server/admin/role'
 
 // 添加角色
 export const saveRole = (data: any) => axios({
@@ -9,14 +9,14 @@ export const saveRole = (data: any) => axios({
 })
 
 // 删除角色
-export const deleteRoleById = (id: any) => axios({
-  url: `/${prefix_name}/deleteRoleById/${id}`,
+export const deleteRole = (id: any) => axios({
+  url: `/${prefix_name}/deleteRole/${id}`,
   method: 'delete',
 })
 
 // 根据Id获取角色信息
-export const getRuleById = (id: any) => axios({
-  url: `/${prefix_name}/getRuleById/${id}`,
+export const infoRole = (id: any) => axios({
+  url: `/${prefix_name}/infoRole/${id}`,
   method: 'get',
 })
 
@@ -28,8 +28,8 @@ export const updateRole = (data: any) => axios({
 })
 
 // 获取所有角色列表
-export const getRoleList = () => axios({
-  url: `/${prefix_name}/getRoleList`,
+export const listRole = () => axios({
+  url: `/${prefix_name}/listRole`,
   method: 'get',
 })
 

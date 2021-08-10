@@ -1,5 +1,5 @@
 import axios from '../../utils/axios'
-var prefix_name = 'base-admin-server/dict/data'
+var prefix_name = 'sys-server/admin/dict/data'
 
 export interface page {
   pageSize: number,
@@ -25,8 +25,8 @@ export const saveDictData = (data: any) => axios({
 })
 
 // 批量删除字典数据
-export const deleteDictDataByCodes = (data: any) => axios({
-  url: `/${prefix_name}/deleteDictDataByCodes`,
+export const deleteDictData = (data: any) => axios({
+  url: `/${prefix_name}/deleteDictData`,
   method: 'delete',
   data
 })
@@ -39,14 +39,14 @@ export const updateDictData = (data: any) => axios({
 })
 
 // 根据Code获取字典数据详情
-export const getDictDataByCode = (code: number) => axios({
-  url: `/${prefix_name}/getDictDataByCode/${code}`,
+export const infoDictData = (code: number) => axios({
+  url: `/${prefix_name}/infoDictData/${code}`,
   method: 'get'
 })
 
 // 分页查询字典数据列表
-export const getDictDataByPage = (data: page) => axios({
-  url: `/${prefix_name}/getDictDataByPage`,
+export const pageDictData = (data: page) => axios({
+  url: `/${prefix_name}/pageDictData`,
   method: 'post',
   data
 })

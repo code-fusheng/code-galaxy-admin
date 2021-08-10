@@ -1,43 +1,41 @@
 <template>
-  <div class="dictDype-container">
+  <div>
     <!-- 搜索栏 模糊查询-->
     <el-form :inline="true" :model="page" class="demo-form-inline" size="mini">
-      <el-form-item label="字典标签">
-        <el-input v-model="page.params.dictLabel" placeholder="请输入字典标签" clearable />
+      <el-form-item label="分类名称">
+        <el-input v-model="page.params.categoryName" placeholder="分类名称" clearable />
       </el-form-item>
-      <el-form-item label="字典类型">
-        <el-input v-model="page.params.dictType" placeholder="请输入字典类型" clearable />
+      <el-form-item label="分类级别">
+        <el-select v-model="page.params.level" placeholder="请求状态" clearable filterable>
+          <el-option label="一级" :value="1" />
+          <el-option label="二级" :value="2" />
+          <el-option label="三级" :value="3" />
+        </el-select>
       </el-form-item>
       <el-form-item label="起始日期">
         <el-date-picker
-          v-model="page.params.dictDataTime"
-          type="datetimerange"
+          v-model="page.params.categoryTime"
+          type="daterange"
+          unlink-panels
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
+          end-placeholder="结束日期"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" sizi="mini" @click="search">查询</el-button>
         <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">恢复</el-button>
+        <el-button type="primary" icon="el-icon-plus" class="add-button" size="mini" @click="openAddDialog">添加</el-button>
       </el-form-item>
     </el-form>
-    <!-- 表格工具按钮开始 -->
-    <el-row :gutter="10" style="margin-bottom: 8px;">
-      <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="openAddDialog">新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="openUpdateDialog">修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="toDelete">删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="warning" icon="el-icon-refresh" size="mini">缓存同步</el-button>
-      </el-col>
-    </el-row>
-    <!-- 表格工具按钮结束 -->
+
+    <!-- 列表 -->
+    <!--
+      1. :data v-bind:model="page.list" 绑定数据 分页对象的的list数据
+      2. show-overflow-tooltip 超出部分隐藏
+      3. @selection-change="handleSelectionChange" selection-change	当选择项发生变化时会触发该事件
+      4. @sort-change="changeSort" sort-change 事件回中可以获取当前排序的字段名[prop]和排序顺序[order]
+     -->
     <el-table
       v-loading="loading"
       :data="page.list"
@@ -49,28 +47,43 @@
       @selection-change="handleSelectionChange"
       @sort-change="changeSort"
     >
-      <el-table-column type="selection" width="50" align="center" />
-            <el-table-column prop="dictValue" label="字典键值" width="100" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictLabel" label="字典标签" width="120" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictType" label="字典类型" width="180" align="center" show-overflow-tooltip />
-      <el-table-column prop="dictSort" label="排序" width="80" align="center" sortable="custom" />
+      <el-table-column type="index" fixed="left" label="#" min-width="60" align="center" />
+      <el-table-column prop="categoryName" label="模版名称" min-width="150" align="center" sortable="custom" />
+      <el-table-column prop="categoryImage" label="分类图片" align="center" width="120">
+        <template #default={row}>
+          <el-image
+            style="width: 100%;height: 50px"
+            :src="row.categoryImage"
+            :preview-src-list="[row.categoryImage]"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column prop="articleCount" label="文章数" width="100" align="center" sortable="custom" />
+      <el-table-column prop="level" label="级别" min-width="120" align="center" sortable="custom">
+        <template #default={row}>
+          <el-tag v-if="row.level === 1">一级</el-tag>
+          <el-tag v-else-if="row.level === 2" type="info">二级</el-tag>
+          <el-tag v-else type="error">三级</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="pid" label="父级id" width="100" align="center" sortable="custom" />
       <el-table-column prop="createdTime" label="创建时间" width="160" align="center" sortable="custom" />
       <el-table-column prop="updatedTime" label="更新时间" width="160" align="center" sortable="custom" />
       <el-table-column prop="creatorName" label="创建者" width="120" align="center" show-overflow-tooltip  />
       <el-table-column prop="updaterName" label="更新者" width="120" align="center" show-overflow-tooltip  />
       <el-table-column prop="remark" label="备注" width="120" align="center" show-overflow-tooltip />
-      <el-table-column prop="isEnabled" label="状态" width="80" align="center">
+      <el-table-column prop="enable" label="状态" min-width="150" align="center">
         <template #default={row}>
           <el-tag v-if="row.isEnabled === 1">启用</el-tag>
           <el-tag v-else type="info">弃用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="180" align="center">
+      <el-table-column label="操作" min-width="300" align="center">
         <template #default={row}>
-          <el-button type="text" size="mini" icon="el-icon-edit" @click="openUpdateDialog(row)">修改</el-button>
-          <el-button v-if="row.isEnabled === 0" type="text" icon="el-icon-check" size="mini" >启用</el-button>
-          <el-button v-if="row.isEnabled === 1" type="text" icon="el-icon-close" size="mini" >弃用</el-button>
-          <el-button type="text" size="mini" icon="el-icon-delete" @click="toDelete(row)">删除</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-edit" @click="openUpdateDialog(row)">修改</el-button>
+          <el-button v-if="row.isEnabled === 0" icon="el-icon-check" size="mini" type="success" @click="toEnable(row.categoryId)">启用</el-button>
+          <el-button v-if="row.isEnabled === 1" icon="el-icon-close" size="mini" type="warning" @click="toDisable(row.categoryId)">弃用</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="toDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,18 +107,20 @@
       :page-size="page.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="page.totalCount"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     />
 
     <!-- 添加弹窗 -->
-    <el-dialog title="添加字典数据" v-model="addDialog">
-      <data-add @closeAddDialog="closeAddDialog" @pageDictData="pageDictData" />
+    <el-dialog title="添加" v-model="addDialog">
+      <category-add @closeAddDialog="closeAddDialog" @pageCategory="pageCategory" />
     </el-dialog>
     <!--
       修改弹窗
-      :type="type" 用于传递参数对象
+      :model="model" 用于传递参数对象
     -->
-    <el-dialog title="修改字典数据" v-model="updateDialog">
-      <data-update :type="type" :data="data" @closeUpdateDialog="closeUpdateDialog" @pageDictData="pageDictData" />
+    <el-dialog title="修改" v-model="updateDialog">
+      <category-update :category="category" @closeUpdateDialog="closeUpdateDialog" @pageCategory="pageCategory" />
     </el-dialog>
 
   </div>
@@ -113,24 +128,21 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { pageDictData, infoDictData, deleteDictData } from '@/api/base/dictData'
-
-import DataAdd from './data-add.vue'
-import DataUpdate from './data-update.vue'
-
+import { infoCategory, pageCategory, deleteCategory } from '@/api/article/category'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
+// 导入组件
+import CategoryAdd from './category-add.vue'
+import CategoryUpdate from './category-update.vue'
 export default defineComponent({
+  //  定义添加的组件 子组件/私有组件
   components: {
-    DataAdd,
-    DataUpdate
+    CategoryAdd,
+    CategoryUpdate
   },
   data() {
     return {
-      dictType: {},
-      // 组件传输对象
-      type: {}, // 字典类型
-      data: {}, // 字典数据
+      category: {},
       // 定义page对象
       page: {
         currentPage: 1, // 当前页
@@ -138,9 +150,7 @@ export default defineComponent({
         totalPage: 0, // 总页数
         totalCount: 0, // 总条数
         params: {
-          dictType: {},
-          dictLabel: '',
-          dictDataTime: undefined
+          categoryName: ''
         }, // 查询参数对象
         list: [], // 数据
         sortColumn: 'createdTime', // 排序列
@@ -148,39 +158,37 @@ export default defineComponent({
       },
       loading: true, // 控制是否显示加载效果
       // 选中数组
-      codes: [],
+      ids: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
-      selectDatas: [], // 被选中的列
+      selectCategorys: [], // 被选中的列
       addDialog: false, // 控制添加弹窗显示
       updateDialog: false // 控制修改弹窗显示
     }
   },
   created() {
-    this.page.params.dictType = this.$route.params.dictType
-    this.pageDictData()
+    this.pageCategory()
   },
   methods: {
-    pageDictData() {
+    pageCategory() {
       this.loading = true
-      pageDictData(this.page).then((res) => {
+      pageCategory(this.page).then(res => {
         this.page = res.data
         this.loading = false
       })
     },
-    openAddDialog() {
+        openAddDialog() {
       this.addDialog = true
-      this.type = this.$route.params.dictType
     },
     openUpdateDialog(row: any) {
-      var code: number = row.dictCode
-      if (code === undefined) {
-        code = this.selectDatas[0]
+      var id: number = row.categoryId
+      if (id === undefined) {
+        id = this.selectCategorys[0]
       }
-      infoDictData(code).then(res => {
-        this.data = res.data
+      infoCategory(id).then(res => {
+        this.category = res.data
         this.updateDialog = true
       })
     },
@@ -194,21 +202,21 @@ export default defineComponent({
     },
     // 删除
     toDelete(row: any) {
-      let codes: any[] = []
-      if (row.dictCode == undefined) {
-        codes = this.selectDatas
+      let ids: any[] = []
+      if (row.categoryId == undefined) {
+        ids = this.selectCategorys
       } else {
-        var code: any = row.dictCode
-        codes.push(code)
+        var id: any = row.categoryId
+        ids.push(id)
       }
-      console.log('批量删除' + codes)
+      console.log('批量删除' + ids)
       ElMessageBox.confirm('是否删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteDictData(codes).then(res => {
-          this.pageDictData()
+        deleteCategory(ids).then(res => {
+          this.pageCategory()
         })
       }).catch(() => {
         ElMessage.info('操作提示: 已取消删除!')
@@ -218,25 +226,24 @@ export default defineComponent({
     // 条件搜索
     search() {
       this.page.currentPage = 1
-      this.pageDictData()
+      this.pageCategory()
     },
     // 恢复搜索框
     refresh() {
       this.page.currentPage = 1
-      this.page.params.dictLabel = ''
-      this.page.params.dictDataTime = undefined
-      this.pageDictData()
+      this.page.params.categoryName = ''
+      this.pageCategory()
     },
     // 每页大小改变 参数 value 为每页大小(pageSize)
     handleSizeChange(val) {
       this.page.pageSize = val
       // 重新请求,刷新页面
-      this.pageDictData()
+      this.pageCategory()
     },
     // 当前页跳转 参数 value 当前页(currentPage)
     handleCurrentChange(val) {
       this.page.currentPage = val
-      this.pageDictData()
+      this.pageCategory()
     },
     // 条件排序 e 和 val 都行
     changeSort(e) {
@@ -247,17 +254,16 @@ export default defineComponent({
         this.page.sortColumn = ''
         this.page.sortMethod = 'asc'
       }
-      this.pageDictData()
+      this.pageCategory()
     },
     // 数据表格的多选择框选择时触发
     handleSelectionChange(selection) {
-      this.selectDatas = selection.map(item => item.dictCode)
-      console.log(this.selectDatas)
+      this.selectCategorys = selection.map(item => item.categoryId)
+      console.log(this.selectCategorys)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
   }
 })
 </script>
-
 

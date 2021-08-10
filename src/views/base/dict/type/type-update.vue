@@ -66,7 +66,7 @@ export default {
       updateDictType(this.dictType).then(res => {
         this.eventLoading = false
         this.$emit('closeUpdateDialog')
-        this.$emit('getDictTypeByPage')
+        this.$emit('pageDictType')
       })
     },
     close() {

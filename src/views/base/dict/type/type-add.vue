@@ -52,7 +52,7 @@ export default {
       saveDictType(this.dictType).then(res => {
         this.eventLoading = false
         this.$emit('closeAddDialog')
-        this.$emit('getDictTypeByPage')
+        this.$emit('pageDictType')
       })
     },
     close() {

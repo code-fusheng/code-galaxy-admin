@@ -19,7 +19,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="getUserByPage">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" sizi="mini" @click="pageUser">查询</el-button>
         <el-button type="success" icon="el-icon-refresh-left" size="mini" @click="refresh">恢复</el-button>
       </el-form-item>
       <!-- 表格工具按钮开始 -->
@@ -157,12 +157,12 @@
 
     <!-- 用户添加弹出层 -->
     <el-dialog title="添加用户" v-model="addDialog" width="80%">
-      <user-add @closeAddDialog="closeAddDialog" @getUserByPage="getUserByPage" />
+      <user-add @closeAddDialog="closeAddDialog" @pageUser="pageUser" />
     </el-dialog>
 
     <!-- 用户更新弹出层 -->
     <el-dialog title="修改用户" v-model="updateDialog" width="80%">
-      <user-update :user="user" @closeUpdateDialog="closeUpdateDialog" @getUserByPage="getUserByPage" />
+      <user-update :user="user" @closeUpdateDialog="closeUpdateDialog" @pageUser="pageUser" />
     </el-dialog>
 
   </div>
@@ -170,7 +170,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { getUserByPage, getUserById } from "@/api/user/user";
+import { pageUser, infoUser } from "@/api/user/user";
 import { getRoleList, getRoleIdsByUserId } from "@/api/user/role";
 
 import UserAdd from "./user-add.vue";
@@ -217,11 +217,11 @@ export default defineComponent({
     };
   },
   created() {
-    this.getUserByPage();
+    this.pageUser();
   },
   methods: {
-    getUserByPage() {
-      getUserByPage(this.page).then((res) => {
+    pageUser() {
+      pageUser(this.page).then((res) => {
         this.page = res.data;
         this.loading = false;
       });
@@ -230,24 +230,24 @@ export default defineComponent({
     // 条件搜索
     search() {
       this.page.currentPage = 1;
-      this.getUserByPage();
+      this.pageUser();
     },
     // 恢复搜索框
     refresh() {
       this.page.currentPage = 1;
       this.page.params.username = "";
-      this.getUserByPage();
+      this.pageUser();
     },
     // 每页大小改变 参数 value 为每页大小(pageSize)
     handleSizeChange(val) {
       this.page.pageSize = val;
       // 重新请求,刷新页面
-      this.getUserByPage();
+      this.pageUser();
     },
     // 当前页跳转 参数 value 当前页(currentPage)
     handleCurrentChange(val) {
       this.page.currentPage = val;
-      this.getUserByPage();
+      this.pageUser();
     },
     // 条件排序 e 和 val 都行
     changeSort(e) {
@@ -258,7 +258,7 @@ export default defineComponent({
         this.page.sortColumn = "";
         this.page.sortMethod = "asc";
       }
-      this.getUserByPage();
+      this.pageUser();
     },
     // 数据表格的多选择框选择时触发
     handleSelectionChange(selection) {
@@ -276,7 +276,7 @@ export default defineComponent({
       if (id === undefined) {
         id = this.selectUsers[0];
       }
-      getUserById(id).then((res) => {
+      infoUser(id).then((res) => {
         this.user = res.data;
         this.updateDialog = true;
       });

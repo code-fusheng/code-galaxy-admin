@@ -74,7 +74,7 @@ export default {
       saveDictData(this.dictData).then(res => {
         this.eventLoading = false
         this.$emit('closeAddDialog')
-        this.$emit('getDictDataByPage')
+        this.$emit('pageDictData')
       })
     },
     close() {

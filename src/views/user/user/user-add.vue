@@ -131,7 +131,7 @@ export default {
       saveUser(this.user).then(res => {
         this.eventLoading = false
         this.$emit('closeAddDialog')
-        this.$emit('getUserByPage')
+        this.$emit('pageUser')
       })
     },
     uploadSuccess(res, file) {

@@ -1,5 +1,5 @@
 import axios from '@/utils/axios'
-var prefix_name = 'user-admin-server/menu'
+var prefix_name = 'user-server/admin/menu'
 
 export interface Page {
   pageSize: number,
@@ -8,8 +8,8 @@ export interface Page {
   sortMethod: String
 }
 
-export const getMenuList = () => axios({
-  url: `/${prefix_name}/getMenuList`,
+export const listMenu = () => axios({
+  url: `/${prefix_name}/listMenu`,
   method: 'get',
 })
 
@@ -18,8 +18,8 @@ export const getMenuIdsByRoleId = (id: number) => axios({
   method: 'get',
 })
 
-export const getMenuByPage = (data: any) => axios({
-  url: `/${prefix_name}/getMenuByPage`,
+export const pageMenu = (data: any) => axios({
+  url: `/${prefix_name}/pageMenu`,
   method: 'post',
   data
 })

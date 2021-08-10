@@ -17,6 +17,10 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'
 import AntDesign from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import 'mavon-editor/dist/markdown/github-markdown.min.css'
+
 import * as echarts from 'echarts'
 
 import { resetForm, handleTree } from '@/utils/tools'
@@ -32,4 +36,5 @@ app.use(router)
 app.use(store)
 app.use(ElementPlus, { locale })
 app.use(AntDesign)
+app.use(mavonEditor)
 app.mount('#app')

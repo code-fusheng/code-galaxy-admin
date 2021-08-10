@@ -1,5 +1,5 @@
 import axios from '@/utils/axios'
-var prefix_name = 'user-admin-server/user'
+var prefix_name = 'user-server/admin/user'
 
 export interface Page {
   pageSize: number,
@@ -16,14 +16,14 @@ export const saveUser = (data: any) => axios({
 })
 
 // 根据Id删除用户
-export const deleteUserById = (id: any) => axios({
-  url: `/${prefix_name}/deleteUserById/${id}`,
+export const deleteUser = (id: any) => axios({
+  url: `/${prefix_name}/deleteUser/${id}`,
   method: 'delete'
 })
 
 // 根据Id获取用户详情
-export const getUserById = (id: any) => axios({
-  url: `/${prefix_name}/getUserById/${id}`,
+export const infoUser = (id: any) => axios({
+  url: `/${prefix_name}/infoUser/${id}`,
   method: 'get'
 })
 
@@ -35,8 +35,8 @@ export const updateUser = (data: any) => axios({
 })
 
 // 分页查询用户
-export const getUserByPage = (data: any) => axios({
-  url: `/${prefix_name}/getUserByPage`,
+export const pageUser = (data: any) => axios({
+  url: `/${prefix_name}/pageUser`,
   method: 'post',
   data
 })

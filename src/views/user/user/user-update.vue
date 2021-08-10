@@ -137,7 +137,7 @@ export default {
     onSubmit() {
       updateUser(this.user).then(res => {
         this.$emit('closeUpdateDialog')
-        this.$emit('getUserByPage')
+        this.$emit('pageUser')
       })
       this.imageUrl = null
     },
