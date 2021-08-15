@@ -5,36 +5,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { getRepositoryList } from '@/api/exam/repository'
-import { getRuleList } from '@/api/exam/rule'
-import store from '@/store/index'
+import { defineComponent } from 'vue';
+import { getRepositoryList } from '@/api/exam/repository';
+import { getRuleList } from '@/api/exam/rule';
+import store from '@/store/index';
 
 export default defineComponent({
   name: 'App',
-    data() {
+  data() {
     return {
       repositoryList: [],
-      ruleList: []
-    }
+      ruleList: [],
+    };
   },
   created() {
-    console.log(import.meta.env.VITE_APP_SWAGGER_URL)
+    console.log(import.meta.env.VITE_APP_SWAGGER_URL);
     // this.initData()
   },
   methods: {
     initData() {
       getRepositoryList().then((res) => {
-        this.repositoryList = res.data
-        store.commit('setRepositoryList', this.repositoryList)
+        this.repositoryList = res.data;
+        store.commit('setRepositoryList', this.repositoryList);
       }),
       getRuleList().then((res) => {
-        this.ruleList = res.data
-        store.commit('setRuleList', this.ruleList)
-      })
-    }
-  }
-})
+        this.ruleList = res.data;
+        store.commit('setRuleList', this.ruleList);
+      });
+    },
+  },
+});
 </script>
 
 <style>
@@ -48,21 +48,24 @@ export default defineComponent({
 
 /* 滚动条的宽度 */
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 10px;
+  width: 5px;
+  height: 10px;
 }
 /* 滚动条滑块样式 */
 ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-image: linear-gradient(to right,rgba(100, 163, 214, 0.5),rgba(62, 124, 182, 0.5));
+  border-radius: 5px;
+  background-image: linear-gradient(
+    to right,
+    rgba(100, 163, 214, 0.5),
+    rgba(62, 124, 182, 0.5)
+  );
 }
 
 .pagination {
   margin-top: 15px;
 }
 
-  .el-drawer__body {
-    overflow-y: auto !important;
-  }
-
+.el-drawer__body {
+  overflow-y: auto !important;
+}
 </style>
