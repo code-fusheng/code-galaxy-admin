@@ -11,7 +11,7 @@ const defaultState = {
   user: {},
 
   // 系统设置
-  sideBarState: true,
+  sideBarState: true
 };
 
 // 创建一个 store 实例
@@ -28,18 +28,13 @@ export default createStore({
     setToken: (state, token) => {
       state.token = token;
     },
-    setRepositoryList: (state, repositoryList) => (
-      state.repositoryList = repositoryList
-    ),
-    setRuleList: (state, ruleList) => (
-      state.ruleList = ruleList
-    ),
-    setUser: (state, user) => (
-      state.user = user
-    ),
+    setRepositoryList: (state, repositoryList) =>
+      (state.repositoryList = repositoryList),
+    setRuleList: (state, ruleList) => (state.ruleList = ruleList),
+    setUser: (state, user) => (state.user = user),
     setSideBarState: (state, sideBarState) => {
       state.sideBarState = sideBarState;
-    },
+    }
   },
   // action 提交操作 不直接更改状态 间接通过 mutations 去操作更新状态
   actions: {
@@ -61,7 +56,7 @@ export default createStore({
     },
     setSideBarState(sideBarState) {
       sideBarState.commit('sideBarState');
-    },
+    }
   },
   // 属性状态访问函数
   getters: {
@@ -82,7 +77,6 @@ export default createStore({
     },
     sideBarState(state: typeof defaultState) {
       return state.sideBarState;
-    },
-  },
-
+    }
+  }
 });

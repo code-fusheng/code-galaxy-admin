@@ -1,0 +1,1 @@
+import{a as e}from"./index.eb4e575a.js";const r=()=>e({url:"/user-server/admin/role/listRole",method:"get"}),s=r=>e({url:`/user-server/admin/role/getRoleIdsByUserId/${r}`,method:"get"});export{s as g,r as l};

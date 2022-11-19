@@ -178,6 +178,11 @@ X!code-galaxy?
 rsync -P "-e ssh -p 22221"  -avz --progress  . root@47.111.158.6:/root/App/code-galaxy/code-galaxy-admin
 ```
 
+```
+# 启动指令
+yarn run serve
+```
+
 
 
 

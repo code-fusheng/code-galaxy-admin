@@ -1,0 +1,1 @@
+import{a as e}from"./index.eb4e575a.js";var t="user-server/admin/menu";const a=()=>e({url:`/${t}/listMenu`,method:"get"}),s=a=>e({url:`/${t}/getMenuIdsByRoleId/${a}`,method:"get"}),r=a=>e({url:`/${t}/pageMenu`,method:"post",data:a});export{s as g,a as l,r as p};

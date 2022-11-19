@@ -35,17 +35,15 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
-import axios from '../utils/axios'
+import { ref, defineComponent } from 'vue';
+import axios from '../utils/axios';
 export default defineComponent({
-  data() {
-
-  },
+  data() {},
   methods: {
     testAxios: () => {
       axios.get('/test-server/debug/getPort').then((res) => {
-        console.log(res.data)
-      })
+        console.log(res.data);
+      });
     }
   },
   name: 'HelloWorld',
@@ -56,10 +54,10 @@ export default defineComponent({
     }
   },
   setup: () => {
-    const count = ref(0)
-    return { count }
+    const count = ref(0);
+    return { count };
   }
-})
+});
 </script>
 
 <style scoped>

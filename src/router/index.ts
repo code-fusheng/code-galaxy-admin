@@ -1,7 +1,12 @@
 // 路由配置文件
-import { createRouter, createMemoryHistory, RouteRecordRaw, createWebHashHistory } from 'vue-router'
+import {
+  createRouter,
+  createMemoryHistory,
+  RouteRecordRaw,
+  createWebHashHistory
+} from 'vue-router';
 /* Layout */
-import Layout from '@/layout/appMain.vue'
+import Layout from '@/layout/appMain.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'test',
         name: 'test',
         component: () => import('@/views/dashboard/test.vue')
-      },
+      }
     ]
   },
   {
@@ -73,7 +78,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'online-exam',
         name: 'Online-exam',
-        component: ()  => import('@/views/exam/exam/online-exam.vue')
+        component: () => import('@/views/exam/exam/online-exam.vue')
       },
       {
         path: 'repository',
@@ -109,28 +114,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'grades',
         name: 'Grades',
         component: () => import('@/views/exam/paper/paper-list.vue')
-      },
-    ]
-  },
-  {
-    path: "/article",
-    component: Layout,
-    redirect: '/article/article',
-    children: [
-      {
-        path: 'category',
-        name: 'Category',
-        component: () => import('@/views/article/category/category-list.vue')
-      },
-      {
-        path: 'article',
-        name: 'Article',
-        component: () => import('@/views/article/article/article-list.vue')
       }
     ]
   },
   {
-    path: "/sys",
+    path: '/sys',
     component: Layout,
     redirect: '/sys/sysLog',
     children: [
@@ -158,15 +146,14 @@ const routes: Array<RouteRecordRaw> = [
         path: 'swagger',
         name: 'Swagger',
         component: () => import('@/views/sys/swagger/swagger-index.vue')
-      },
+      }
     ]
   }
-]
-
+];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
-})
+});
 
-export default router
+export default router;

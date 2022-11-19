@@ -121,14 +121,10 @@
             </el-menu-item>
           </router-link>
           <router-link to="/sys/druid">
-            <el-menu-item>
-              <i class="el-icon-coin"></i> DB 监控
-            </el-menu-item>
+            <el-menu-item> <i class="el-icon-coin"></i> DB 监控 </el-menu-item>
           </router-link>
           <router-link to="/sys/swagger">
-            <el-menu-item>
-              <i class="el-icon-coin"></i> 接口文档
-            </el-menu-item>
+            <el-menu-item> <i class="el-icon-coin"></i> 接口文档 </el-menu-item>
           </router-link>
         </el-menu-item-group>
       </el-submenu>
@@ -137,11 +133,10 @@
 </template>
 
 <script lang="ts">
-import store from '@/store/index'
+import store from '@/store/index';
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -149,8 +144,8 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,0 +1,1 @@
+import{a}from"./index.eb4e575a.js";var e="exam-server/admin/paper";const t=t=>a({url:`/${e}/getPaperByPage`,method:"post",data:t}),r=t=>a({url:`/${e}/getPaperBaseInfoById/${t}`,method:"get"}),s=t=>a({url:`/${e}/savePaper`,method:"post",data:t}),o=t=>a({url:`/${e}/getPaperVoListByExamId/${t}`,method:"get"});export{r as a,t as b,o as g,s};
